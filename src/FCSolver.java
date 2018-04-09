@@ -1,6 +1,8 @@
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
-import java.util.Queue;
 import java.util.Set;
 import java.util.Stack;
 
@@ -8,15 +10,15 @@ public class FCSolver {
 
     BinaryCSP problem;
     int nodesExplored;
-    Queue<CSPVariable> varQueue;
-    Stack<Set<Map<CSPVariable, Set<Integer>>>> pruningStack;
+    List<CSPVariable> varList;
+    Stack<Map<CSPVariable, Set<Integer>>> pruningStack;
 
     public FCSolver(BinaryCSP problem) {
 
         super();
         this.problem = problem;
-        varQueue = new LinkedList<CSPVariable>(problem.getVars());
-        pruningStack = new Stack<Set<Map<CSPVariable, Set<Integer>>>>();
+        varList = new LinkedList<CSPVariable>(problem.getVars());
+        pruningStack = new Stack<Map<CSPVariable, Set<Integer>>>();
     }
 
     public void printSolution() {
@@ -68,7 +70,7 @@ public class FCSolver {
             return true;
 
         }
-        CSPVariable var = varQueue.poll();
+        CSPVariable var = varList.iterator().next();
         int val = selectValFromDomain(var);
         return branchFCLeft(var, val) || branchFCRight(var, val);
     }
@@ -81,13 +83,14 @@ public class FCSolver {
 
     public boolean branchFCLeft(CSPVariable var, int val) {
 
-        var.assign(val);
+        assign(var, val);
 
         if (reviseFutureArcs(var)) {
-            varQueue.poll();
+            varList.remove(var);
             if (forwardChecking()) {
                 return true;
             }
+            varList.add(var);
         }
         undoPruning();
         unassign(var);
@@ -97,14 +100,35 @@ public class FCSolver {
 
     private void undoPruning() {
 
-        // TODO Auto-generated method stub
-
+        Map<CSPVariable, Set<Integer>> pruned = pruningStack.pop();
+        for (CSPVariable future : pruned.keySet()) {
+            for (int val : pruned.get(future)) {
+                future.addToDomain(val);
+            }
+        }
     }
 
-    private boolean reviseFutureArcs(CSPVariable var) {
+    private boolean reviseFutureArcs(CSPVariable current) {
 
-        // TODO Auto-generated method stub
-        return false;
+        boolean hasPruned = false;
+        Map<CSPVariable, Set<Integer>> pruned = new HashMap<CSPVariable, Set<Integer>>();
+
+        for (CSPVariable future : problem.getContraints().get(current).keySet()) {
+            BinaryConstraint constr = problem.getContraints().get(current).get(future);
+            for (int val : future.getDomain()) {
+                if (!constr.hasSupport(current.getValue())) {
+                    hasPruned = true;
+                    future.removeFromDomain(val);
+                    if (!pruned.keySet().contains(future)) {
+                        pruned.put(future, new HashSet());
+                    }
+                    pruned.get(future).add(val);
+                }
+            }
+        }
+        pruningStack.push(pruned);
+        return hasPruned;
+
     }
 
     public boolean branchFCRight(CSPVariable var, int val) {

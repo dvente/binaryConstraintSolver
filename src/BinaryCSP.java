@@ -86,4 +86,9 @@ public final class BinaryCSP {
         return done;
     }
 
+    public Map<CSPVariable, Map<CSPVariable, BinaryConstraint>> getContraints() {
+
+        return constraints;
+    }
+
 }

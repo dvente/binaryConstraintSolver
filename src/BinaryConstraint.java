@@ -35,6 +35,17 @@ public final class BinaryConstraint {
 
     // SUGGESTION: You will want to add methods here to reason about the constraint
 
+    public boolean hasSupport(int val) {
+
+        for (BinaryTuple tup : tuples) {
+            if (tup.getVal1() == val) {
+                return true;
+            }
+
+        }
+        return false;
+    }
+
     public boolean isConsistent() {
 
         //all vars are assigned
