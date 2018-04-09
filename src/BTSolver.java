@@ -24,7 +24,6 @@ public class BTSolver {
         if (!backtrack(0)) {
             System.out.println("No solution possible");
         }
-        //		System.out.println(problem.toString());
     }
 
     // adapted from lecture slides. simple backtracking
