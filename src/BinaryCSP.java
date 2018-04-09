@@ -1,12 +1,14 @@
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Map;
 
 public final class BinaryCSP {
 
     private ArrayList<CSPVariable> varList;
-    private ArrayList<BinaryConstraint> constraints;
+    //    private ArrayList<BinaryConstraint> constraints;
+    private Map<CSPVariable, Map<CSPVariable, BinaryConstraint>> constraints;
 
-    public BinaryCSP(CSPVariable[] domainBounds, ArrayList<BinaryConstraint> c) {
+    public BinaryCSP(CSPVariable[] domainBounds, Map<CSPVariable, Map<CSPVariable, BinaryConstraint>> c) {
 
         varList = new ArrayList<CSPVariable>(Arrays.asList(domainBounds));
         constraints = c;
@@ -20,8 +22,11 @@ public final class BinaryCSP {
         for (int i = 0; i < varList.size(); i++) {
             result.append(varList.get(i).toString());
         }
-        for (BinaryConstraint bc : constraints) {
-            result.append(bc + "\n");
+        for (Map<CSPVariable, BinaryConstraint> bcMap : constraints.values()) {
+            for (BinaryConstraint bc : bcMap.values()) {
+                result.append(bc + "\n");
+            }
+
         }
         return result.toString();
     }
@@ -31,10 +36,10 @@ public final class BinaryCSP {
         return varList.size();
     }
 
-    public ArrayList<BinaryConstraint> getConstraints() {
-
-        return constraints;
-    }
+    //    public ArrayList<BinaryConstraint> getConstraints() {
+    //
+    //        return constraints;
+    //    }
 
     public CSPVariable getVar(int i) {
 
@@ -48,23 +53,37 @@ public final class BinaryCSP {
 
     public boolean isArcConsistent() {
 
-        for (BinaryConstraint constr : getConstraints()) {
-            if (!constr.isConsistent()) {
-                return false;
+        for (Map<CSPVariable, BinaryConstraint> bcMap : constraints.values()) {
+            for (BinaryConstraint bc : bcMap.values()) {
+                if (!bc.isConsistent()) {
+                    return false;
+                }
             }
+
         }
         return true;
     }
 
-    public boolean isArcConsistent(int i, int depth) {
+    public boolean isArcConsistent(CSPVariable past, CSPVariable current) {
 
-        for (BinaryConstraint constr : getConstraints()) {
-            if (constr.getFirstVar() == varList.get(i) && constr.getSecondVar() == varList.get(depth)
-                    && !constr.isConsistent()) {
-                return false;
-            }
+        return constraints.get(past).get(current).isConsistent();
+
+        //        for (BinaryConstraint constr : getConstraints()) {
+        //            if (constr.getFirstVar() == varList.get(i) && constr.getSecondVar() == varList.get(depth)
+        //                    && !constr.isConsistent()) {
+        //                return false;
+        //            }
+        //        }
+        //        return true;
+    }
+
+    public boolean completeAssignment() {
+
+        boolean done = true;
+        for (CSPVariable var : varList) {
+            done = var.isAssigned();
         }
-        return true;
+        return done;
     }
 
 }

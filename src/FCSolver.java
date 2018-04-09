@@ -1,17 +1,22 @@
 import java.util.LinkedList;
+import java.util.Map;
 import java.util.Queue;
+import java.util.Set;
+import java.util.Stack;
 
 public class FCSolver {
 
     BinaryCSP problem;
     int nodesExplored;
     Queue<CSPVariable> varQueue;
+    Stack<Set<Map<CSPVariable, Set<Integer>>>> pruningStack;
 
     public FCSolver(BinaryCSP problem) {
 
         super();
         this.problem = problem;
         varQueue = new LinkedList<CSPVariable>(problem.getVars());
+        pruningStack = new Stack<Set<Map<CSPVariable, Set<Integer>>>>();
     }
 
     public void printSolution() {
@@ -50,22 +55,22 @@ public class FCSolver {
 
     public void solveCurrentProblem() {
 
-        if (!FC()) {
+        if (!forwardChecking()) {
             System.out.println("No solution possible");
         }
     }
 
     // adapted from lecture slides.
-    public boolean FC() {
+    public boolean forwardChecking() {
 
-        if (completeAssignment()) {
-                printSolution()
-                exit()
+        if (problem.completeAssignment()) {
+            printSolution();
+            return true;
+
         }
-            CSPVariable var = varQueue.poll();
-            int val = selectValFromDomain(var);
-            branchFCLeft(varList, var, val)
-            branchFCRight(varList, var, val)
+        CSPVariable var = varQueue.poll();
+        int val = selectValFromDomain(var);
+        return branchFCLeft(var, val) || branchFCRight(var, val);
     }
 
     // just return an element, we can get fancy later
@@ -74,25 +79,53 @@ public class FCSolver {
         return var.getDomain().iterator().next();
     }
 
-    public boolean branchFCLeft(varList, CSPVarible var, int val) {
+    public boolean branchFCLeft(CSPVariable var, int val) {
+
         var.assign(val);
 
-        if( reviseFutureArcs(varList, var)) {
-            ForwardChecking(varList- var);
-        }
-        undoPruning();
-        var.unassign(var);
-    }
-
-    public boolean branchFCRight(varList, CSPVarible var, int val) {
-        var.removeFromDomain(val);
-
-        if(!var.getDomain().isEmpty()) {
-            if(reviseFutureArcs(varList, var)) {
-                FC(varList);
+        if (reviseFutureArcs(var)) {
+            varQueue.poll();
+            if (forwardChecking()) {
+                return true;
             }
         }
-        undoPruning()
-        restoreValue(var, val)
+        undoPruning();
+        unassign(var);
+        return false;
+
+    }
+
+    private void undoPruning() {
+
+        // TODO Auto-generated method stub
+
+    }
+
+    private boolean reviseFutureArcs(CSPVariable var) {
+
+        // TODO Auto-generated method stub
+        return false;
+    }
+
+    public boolean branchFCRight(CSPVariable var, int val) {
+
+        var.removeFromDomain(val);
+
+        if (!var.getDomain().isEmpty()) {
+            if (reviseFutureArcs(var)) {
+                if (forwardChecking()) {
+                    return true;
+                }
+            }
+        }
+        undoPruning();
+        restoreValue(var, val);
+        return false;
+    }
+
+    private void restoreValue(CSPVariable var, int val) {
+
+        var.addToDomain(val);
+
     }
 }

@@ -23,16 +23,13 @@ public class BTSolver {
 
     public void assign(CSPVariable var, int value) {
 
-        assert !var.isAssigned();
-        assert var.getDomain().contains(value);
-        var.setValue(value);
+        var.assign(value);
         nodesExplored++;
-        var.setAssigned(true);
     }
 
     public void unassign(CSPVariable var) {
 
-        var.setAssigned(false);
+        var.unassign();
     }
 
     public static void main(String[] args) {
@@ -57,11 +54,11 @@ public class BTSolver {
     public boolean backtrack(int depth) {
 
         CSPVariable var = problem.getVar(depth);
-        for (int value = var.getLowerBound(); value <= var.getUpperBound(); value++) {
+        for (int value : var.getDomain()) {
             assign(var, value);
             boolean consistent = true;
             for (int i = 0; i < depth; i++) {
-                consistent = problem.isArcConsistent(i, depth);
+                consistent = problem.isArcConsistent(problem.getVar(i), var);
                 if (!consistent) {
                     break;
                 }

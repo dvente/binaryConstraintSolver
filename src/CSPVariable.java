@@ -8,14 +8,11 @@ public class CSPVariable {
     private Set<Integer> domain;
     private boolean assigned;
     private int value;
-    private int upperBound, lowerBound;
 
     public CSPVariable(String name, int lowerBound, int upperBound) {
 
         domain = new HashSet<Integer>();
         this.name = name;
-        this.lowerBound = lowerBound;
-        this.upperBound = upperBound;
         for (int i = lowerBound; i <= upperBound; i++) {
             domain.add(i);
         }
@@ -39,53 +36,33 @@ public class CSPVariable {
         return assigned;
     }
 
-    private void setUpperBound() {
+    public void assign(int value) {
 
-        int upper = Integer.MIN_VALUE;
-        for (int val : domain) {
-            if (val > upper) {
-                upper = val;
-            }
-        }
-        upperBound = upper;
+        assert !assigned;
+        assert domain.contains(value);
+        this.value = value;
+        assigned = true;
     }
 
-    private void setLowerBound() {
+    public void unassign() {
 
-        int lower = Integer.MAX_VALUE;
-        for (int val : domain) {
-            if (val < lower) {
-                lower = val;
-            }
-        }
-        lowerBound = lower;
+        assigned = false;
     }
 
     public void addToDomain(int value) {
 
         domain.add(value);
-        setLowerBound();
-        setUpperBound();
     }
 
-    public void removeFromDomain(int value) throws DomainWhipeoutException {
+    public void removeFromDomain(int value) {
 
         domain.remove(value);
-        if (domain.isEmpty()) {
-            throw new DomainWhipeoutException();
-        }
-        setLowerBound();
-        setUpperBound();
+
     }
 
     public Set<Integer> getDomain() {
 
         return domain;
-    }
-
-    public int getLowerBound() {
-
-        return lowerBound;
     }
 
     @Override
@@ -94,14 +71,13 @@ public class CSPVariable {
         if (isAssigned()) {
             return "Var " + name + ": " + Integer.toString(getValue()) + "\n";
         } else {
-            return "Var " + name + ": " + lowerBound + " .. " + upperBound + "\n";
+            String ans = "Var " + name + ": ";
+            for (int val : domain) {
+                ans += Integer.toString(val) + ", ";
+            }
+            return ans + "\n";
         }
 
-    }
-
-    public int getUpperBound() {
-
-        return upperBound;
     }
 
     public int getValue() {
