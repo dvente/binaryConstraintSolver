@@ -41,10 +41,26 @@ public final class BinaryCSP {
         return varList.get(i);
     }
 
+    public ArrayList<CSPVariable> getVars() {
+
+        return varList;
+    }
+
     public boolean isArcConsistent() {
 
         for (BinaryConstraint constr : getConstraints()) {
             if (!constr.isConsistent()) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public boolean isArcConsistent(int i, int depth) {
+
+        for (BinaryConstraint constr : getConstraints()) {
+            if (constr.getFirstVar() == varList.get(i) && constr.getSecondVar() == varList.get(depth)
+                    && !constr.isConsistent()) {
                 return false;
             }
         }
