@@ -40,16 +40,17 @@ public final class BinaryCSPReader {
       in.ordinaryChar(')') ;
       in.nextToken() ;                                         // n
       int n = (int)in.nval ;
-      int[][] domainBounds = new int[n][2] ;
+      CSPVariable [] vars = new CSPVariable[n];
       for (int i = 0; i < n; i++) {
 	      in.nextToken() ;                                  // ith ub
-	      domainBounds[i][0] = (int)in.nval ;
+	      int lower = (int)in.nval ;
 		    in.nextToken() ;                                   // ','
 		    in.nextToken() ;
-	      domainBounds[i][1] = (int)in.nval ;
+	      int upper = (int)in.nval ;
+	      vars[i] = new CSPVariable(Integer.toString(i),lower,upper);
       }
-      ArrayList<BinaryConstraint> constraints = readBinaryConstraints() ;
-      BinaryCSP csp = new BinaryCSP(domainBounds, constraints) ;
+      ArrayList<BinaryConstraint> constraints = readBinaryConstraints(vars) ;
+      BinaryCSP csp = new BinaryCSP(vars, constraints) ;
       // TESTING:
       // System.out.println(csp) ;
       inFR.close() ;
@@ -61,9 +62,10 @@ public final class BinaryCSPReader {
   }
 
   /**
+ * @param vars 
    *
    */
-  private ArrayList<BinaryConstraint> readBinaryConstraints() {
+  private ArrayList<BinaryConstraint> readBinaryConstraints(CSPVariable[] vars) {
     ArrayList<BinaryConstraint> constraints = new ArrayList<BinaryConstraint>() ;
 	
     try {
@@ -72,10 +74,10 @@ public final class BinaryCSPReader {
 	      // scope
 	      in.nextToken() ;                                       //'('
 		    in.nextToken() ;                                       //var
-	      int var1 = (int)in.nval ;
+	      CSPVariable var1 = vars[(int)in.nval] ;
 		    in.nextToken() ;                                       //','
 		    in.nextToken() ;                                       //var
-        int var2 = (int)in.nval ;
+		    CSPVariable var2 = vars[(int)in.nval] ;
 		    in.nextToken() ;                                       //')'
 
         //tuples

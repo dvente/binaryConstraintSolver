@@ -2,7 +2,15 @@
  * Assumes tuple values are integers
  */
 public final class BinaryTuple {
-  private int val1, val2 ;
+  public int getVal1() {
+		return val1;
+	}
+
+	public int getVal2() {
+		return val2;
+	}
+
+private int val1, val2 ;
   
   public BinaryTuple(int v1, int v2) {
     val1 = v1 ;
