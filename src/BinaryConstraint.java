@@ -1,11 +1,12 @@
 import java.util.ArrayList;
+import java.util.Set;
 
 public final class BinaryConstraint {
 
     private CSPVariable firstVar, secondVar;
-    private ArrayList<BinaryTuple> tuples;
+    private Set<BinaryTuple> tuples;
 
-    public BinaryConstraint(CSPVariable firstVar, CSPVariable secondVar, ArrayList<BinaryTuple> t) {
+    public BinaryConstraint(CSPVariable firstVar, CSPVariable secondVar, Set<BinaryTuple> t) {
 
         this.firstVar = firstVar;
         this.secondVar = secondVar;
@@ -35,20 +36,43 @@ public final class BinaryConstraint {
 
     // SUGGESTION: You will want to add methods here to reason about the constraint
 
-    public boolean hasSupport(CSPVariable futureVar, int val) {
+    public CSPVariable getOtherVar(CSPVariable var) {
+    	if(var == firstVar) {
+    		return secondVar;
+    	} else if(var == secondVar) {
+    		return firstVar;
+    	}
+    	return null;
+    }
+    
+    public boolean isSupported(CSPVariable futureVar, int val) {
+    	
+    	CSPVariable currentVar = getOtherVar(futureVar);
+    	if(currentVar.isAssigned()) {
+    		BinaryTuple tup = new BinaryTuple(currentVar.getValue(),val);
+    		boolean isSupported = tuples.contains(tup); 
+    		return isSupported;
+    	} else {
+    		for(int currentVal : currentVar.getDomain()) {
+    			if(tuples.contains(new BinaryTuple(currentVal,val))) {
+    				return true;
+    			}
+    		}
+    		return false;
+    	}
 
-        for (BinaryTuple tup : tuples) {
-            if (futureVar == firstVar) {
-                if (tup.getVal2() == val) {
-                    return true;
-                }
-            } else {
-                if (tup.getVal1() == val) {
-                    return true;
-                }
-            }
-        }
-        return false;
+//        for (BinaryTuple tup : tuples) {
+//            if (futureVar == firstVar) {
+//                if (tup.matches(val,secondVar.getValue())) {
+//                    return true;
+//                }
+//            } else {
+//                if (tup.matches(firstVar.getValue(),val)) {
+//                    return true;
+//                }
+//            }
+//        }
+//        return false;
     }
 
     public boolean isConsistent() {

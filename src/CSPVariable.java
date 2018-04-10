@@ -56,7 +56,7 @@ public class CSPVariable {
 
     public void removeFromDomain(Set<Integer> toDelete) {
 
-        domain.remove(toDelete);
+        domain.removeAll(toDelete);
 
     }
 

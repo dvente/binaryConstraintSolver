@@ -4,7 +4,9 @@ import java.io.IOException;
 import java.io.StreamTokenizer;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * A reader tailored for binary extensional CSPs. It is created from a
@@ -86,7 +88,7 @@ public final class BinaryCSPReader {
                 in.nextToken(); //')'
 
                 //tuples
-                ArrayList<BinaryTuple> tuples = new ArrayList<BinaryTuple>();
+                Set<BinaryTuple> tuples = new HashSet<BinaryTuple>();
                 in.nextToken(); //1st allowed val of 1st tuple
                 while (!"c".equals(in.sval) && (in.ttype != StreamTokenizer.TT_EOF)) {
                     int val1 = (int) in.nval;

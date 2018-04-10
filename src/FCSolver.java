@@ -115,7 +115,7 @@ public class FCSolver {
         boolean consistent = true;
         Collection<BinaryConstraint> arcsToRevise = problem.getContraints(currentVar);
         for (BinaryConstraint constr : arcsToRevise) {
-            CSPVariable futureVar = constr.getSecondVar();
+            CSPVariable futureVar = constr.getOtherVar(currentVar);
             Set<Integer> deleted = revise(constr, currentVar);
             consistent = !futureVar.getDomain().isEmpty();
             if (!consistent) {
@@ -153,15 +153,10 @@ public class FCSolver {
 
     private Set<Integer> revise(BinaryConstraint constr, CSPVariable currentVar) {
 
-        CSPVariable futureVar;
-        if (constr.getFirstVar() == currentVar) {
-            futureVar = constr.getSecondVar();
-        } else {
-            futureVar = constr.getFirstVar();
-        }
+        CSPVariable futureVar = constr.getOtherVar(currentVar);
         Set<Integer> toDelete = new HashSet<Integer>();
         for (int futureVal : futureVar.getDomain()) {
-            if (!constr.hasSupport(futureVar, futureVal)) {
+            if (!constr.isSupported(futureVar, futureVal)) {
                 toDelete.add(futureVal);
             }
         }
