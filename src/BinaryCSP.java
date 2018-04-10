@@ -80,9 +80,9 @@ public final class BinaryCSP {
 
     public boolean completeAssignment() {
 
-        boolean done = false;
+        boolean done = true;
         for (CSPVariable var : varList) {
-            done = var.isAssigned();
+            done = var.isAssigned() && done;
         }
         return done;
     }

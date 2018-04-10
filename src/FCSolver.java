@@ -130,25 +130,6 @@ public class FCSolver {
         pruningStack.push(pruned);
         return true;
 
-        //        boolean hasPruned = false;
-        //        Map<CSPVariable, Set<Integer>> pruned = new HashMap<CSPVariable, Set<Integer>>();
-        //
-        //        for (CSPVariable future : problem.getContraints().get(current).keySet()) {
-        //            BinaryConstraint constr = problem.getContraints().get(current).get(future);
-        //            for (int val : future.getDomain()) {
-        //                if (!constr.hasSupport(current.getValue())) {
-        //                    hasPruned = true;
-        //                    future.removeFromDomain(val);
-        //                    if (!pruned.keySet().contains(future)) {
-        //                        pruned.put(future, new HashSet());
-        //                    }
-        //                    pruned.get(future).add(val);
-        //                }
-        //            }
-        //        }
-        //        pruningStack.push(pruned);
-        //        return hasPruned;
-
     }
 
     private Set<Integer> revise(BinaryConstraint constr, CSPVariable currentVar) {
