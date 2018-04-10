@@ -54,9 +54,9 @@ public class CSPVariable {
         domain.add(value);
     }
 
-    public void removeFromDomain(int value) {
+    public void removeFromDomain(Set<Integer> toDelete) {
 
-        domain.remove(value);
+        domain.remove(toDelete);
 
     }
 
@@ -94,6 +94,12 @@ public class CSPVariable {
     public void setAssigned(boolean assigned) {
 
         this.assigned = assigned;
+    }
+
+    public void removeFromDomain(int val) {
+
+        domain.remove(val);
+
     }
 
 }

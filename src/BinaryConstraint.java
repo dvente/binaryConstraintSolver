@@ -35,13 +35,18 @@ public final class BinaryConstraint {
 
     // SUGGESTION: You will want to add methods here to reason about the constraint
 
-    public boolean hasSupport(int val) {
+    public boolean hasSupport(CSPVariable futureVar, int val) {
 
         for (BinaryTuple tup : tuples) {
-            if (tup.getVal1() == val) {
-                return true;
+            if (futureVar == firstVar) {
+                if (tup.getVal2() == val) {
+                    return true;
+                }
+            } else {
+                if (tup.getVal1() == val) {
+                    return true;
+                }
             }
-
         }
         return false;
     }

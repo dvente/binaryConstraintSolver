@@ -1,3 +1,4 @@
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -108,27 +109,65 @@ public class FCSolver {
         }
     }
 
-    private boolean reviseFutureArcs(CSPVariable current) {
+    private boolean reviseFutureArcs(CSPVariable currentVar) {
 
-        boolean hasPruned = false;
         Map<CSPVariable, Set<Integer>> pruned = new HashMap<CSPVariable, Set<Integer>>();
-
-        for (CSPVariable future : problem.getContraints().get(current).keySet()) {
-            BinaryConstraint constr = problem.getContraints().get(current).get(future);
-            for (int val : future.getDomain()) {
-                if (!constr.hasSupport(current.getValue())) {
-                    hasPruned = true;
-                    future.removeFromDomain(val);
-                    if (!pruned.keySet().contains(future)) {
-                        pruned.put(future, new HashSet());
-                    }
-                    pruned.get(future).add(val);
-                }
+        boolean consistent = true;
+        Collection<BinaryConstraint> arcsToRevise = problem.getContraints(currentVar);
+        for (BinaryConstraint constr : arcsToRevise) {
+            CSPVariable futureVar = constr.getSecondVar();
+            Set<Integer> deleted = revise(constr, currentVar);
+            consistent = !futureVar.getDomain().isEmpty();
+            if (!consistent) {
+                pruningStack.push(pruned);
+                return false;
             }
+            if (!pruned.keySet().contains(futureVar)) {
+                pruned.put(futureVar, new HashSet<Integer>());
+            }
+            pruned.get(futureVar).addAll(deleted);
         }
         pruningStack.push(pruned);
-        return hasPruned;
+        return true;
 
+        //        boolean hasPruned = false;
+        //        Map<CSPVariable, Set<Integer>> pruned = new HashMap<CSPVariable, Set<Integer>>();
+        //
+        //        for (CSPVariable future : problem.getContraints().get(current).keySet()) {
+        //            BinaryConstraint constr = problem.getContraints().get(current).get(future);
+        //            for (int val : future.getDomain()) {
+        //                if (!constr.hasSupport(current.getValue())) {
+        //                    hasPruned = true;
+        //                    future.removeFromDomain(val);
+        //                    if (!pruned.keySet().contains(future)) {
+        //                        pruned.put(future, new HashSet());
+        //                    }
+        //                    pruned.get(future).add(val);
+        //                }
+        //            }
+        //        }
+        //        pruningStack.push(pruned);
+        //        return hasPruned;
+
+    }
+
+    private Set<Integer> revise(BinaryConstraint constr, CSPVariable currentVar) {
+
+        CSPVariable futureVar;
+        if (constr.getFirstVar() == currentVar) {
+            futureVar = constr.getSecondVar();
+        } else {
+            futureVar = constr.getFirstVar();
+        }
+        Set<Integer> toDelete = new HashSet<Integer>();
+        for (int futureVal : futureVar.getDomain()) {
+            if (!constr.hasSupport(futureVar, futureVal)) {
+                toDelete.add(futureVal);
+            }
+        }
+        futureVar.removeFromDomain(toDelete);
+
+        return toDelete;
     }
 
     public boolean branchFCRight(CSPVariable var, int val) {

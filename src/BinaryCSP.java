@@ -1,5 +1,7 @@
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 
 public final class BinaryCSP {
@@ -66,7 +68,7 @@ public final class BinaryCSP {
 
     public boolean isArcConsistent(CSPVariable past, CSPVariable current) {
 
-        return constraints.get(past).get(current).isConsistent();
+        return constraints.get(current).get(past).isConsistent();
 
         //        for (BinaryConstraint constr : getConstraints()) {
         //            if (constr.getFirstVar() == varList.get(i) && constr.getSecondVar() == varList.get(depth)
@@ -89,6 +91,21 @@ public final class BinaryCSP {
     public Map<CSPVariable, Map<CSPVariable, BinaryConstraint>> getContraints() {
 
         return constraints;
+    }
+
+    public Collection<BinaryConstraint> getContraints(CSPVariable currentVar) {
+
+        if (constraints.containsKey(currentVar)) {
+            return constraints.get(currentVar).values();
+        } else {
+            List<BinaryConstraint> c = new ArrayList<BinaryConstraint>();
+            for (CSPVariable first : constraints.keySet()) {
+                if (constraints.get(first).containsKey(currentVar)) {
+                    c.add(constraints.get(first).get(currentVar));
+                }
+            }
+            return c;
+        }
     }
 
 }
