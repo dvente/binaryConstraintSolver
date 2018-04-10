@@ -61,18 +61,6 @@ public final class BinaryConstraint {
     		return false;
     	}
 
-//        for (BinaryTuple tup : tuples) {
-//            if (futureVar == firstVar) {
-//                if (tup.matches(val,secondVar.getValue())) {
-//                    return true;
-//                }
-//            } else {
-//                if (tup.matches(firstVar.getValue(),val)) {
-//                    return true;
-//                }
-//            }
-//        }
-//        return false;
     }
 
     public boolean isConsistent() {

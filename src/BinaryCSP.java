@@ -7,7 +7,6 @@ import java.util.Map;
 public final class BinaryCSP {
 
     private ArrayList<CSPVariable> varList;
-    //    private ArrayList<BinaryConstraint> constraints;
     private Map<CSPVariable, Map<CSPVariable, BinaryConstraint>> constraints;
 
     public BinaryCSP(CSPVariable[] domainBounds, Map<CSPVariable, Map<CSPVariable, BinaryConstraint>> c) {
@@ -68,7 +67,7 @@ public final class BinaryCSP {
 
     public boolean isArcConsistent(CSPVariable past, CSPVariable current) {
 
-        return constraints.get(current).get(past).isConsistent();
+        return constraints.get(past).get(current).isConsistent();
 
         //        for (BinaryConstraint constr : getConstraints()) {
         //            if (constr.getFirstVar() == varList.get(i) && constr.getSecondVar() == varList.get(depth)
@@ -81,7 +80,7 @@ public final class BinaryCSP {
 
     public boolean completeAssignment() {
 
-        boolean done = true;
+        boolean done = false;
         for (CSPVariable var : varList) {
             done = var.isAssigned();
         }
