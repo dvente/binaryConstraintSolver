@@ -62,6 +62,12 @@ public class FCSolver {
         }
     }
 
+    // just return an element, we can get fancy later
+    private int selectValFromDomain(CSPVariable var) {
+
+        return var.getDomain().iterator().next();
+    }
+
     // adapted from lecture slides.
     public boolean forwardChecking() {
 
@@ -70,15 +76,9 @@ public class FCSolver {
             return true;
 
         }
-        CSPVariable var = varList.iterator().next();
+        CSPVariable var = varList.get(0);
         int val = selectValFromDomain(var);
         return branchFCLeft(var, val) || branchFCRight(var, val);
-    }
-
-    // just return an element, we can get fancy later
-    private int selectValFromDomain(CSPVariable var) {
-
-        return var.getDomain().iterator().next();
     }
 
     public boolean branchFCLeft(CSPVariable var, int val) {
@@ -91,12 +91,29 @@ public class FCSolver {
             if (forwardChecking()) {
                 return true;
             }
-            varList.add(var);
+            varList.add(0, var);
         }
-        undoPruning();
         unassign(var);
+        undoPruning();
         return false;
 
+    }
+
+    public boolean branchFCRight(CSPVariable var, int val) {
+
+        branchesExplored++;
+        var.removeFromDomain(val);
+
+        if (!var.getDomain().isEmpty()) {
+            if (reviseFutureArcs(var)) {
+                if (forwardChecking()) {
+                    return true;
+                }
+            }
+        }
+        restoreValue(var, val);
+        undoPruning();
+        return false;
     }
 
     private void undoPruning() {
@@ -107,6 +124,23 @@ public class FCSolver {
                 future.addToDomain(val);
             }
         }
+    }
+
+    private Set<Integer> revise(BinaryConstraint constr, CSPVariable currentVar) {
+
+        CSPVariable futureVar = constr.getOtherVar(currentVar);
+        Set<Integer> toDelete = new HashSet<Integer>();
+        if (futureVar.isAssigned()) {
+            return toDelete;
+        }
+        for (int futureVal : futureVar.getDomain()) {
+            if (!constr.isSupported(futureVar, futureVal)) {
+                toDelete.add(futureVal);
+            }
+        }
+        futureVar.removeFromDomain(toDelete);
+
+        return toDelete;
     }
 
     private boolean reviseFutureArcs(CSPVariable currentVar) {
@@ -137,37 +171,6 @@ public class FCSolver {
     public String toString() {
 
         return "FCSolver \n" + problem.toString();
-    }
-
-    private Set<Integer> revise(BinaryConstraint constr, CSPVariable currentVar) {
-
-        CSPVariable futureVar = constr.getOtherVar(currentVar);
-        Set<Integer> toDelete = new HashSet<Integer>();
-        for (int futureVal : futureVar.getDomain()) {
-            if (!constr.isSupported(futureVar, futureVal)) {
-                toDelete.add(futureVal);
-            }
-        }
-        futureVar.removeFromDomain(toDelete);
-
-        return toDelete;
-    }
-
-    public boolean branchFCRight(CSPVariable var, int val) {
-
-        branchesExplored++;
-        var.removeFromDomain(val);
-
-        if (!var.getDomain().isEmpty()) {
-            if (reviseFutureArcs(var)) {
-                if (forwardChecking()) {
-                    return true;
-                }
-            }
-        }
-        undoPruning();
-        restoreValue(var, val);
-        return false;
     }
 
     private void restoreValue(CSPVariable var, int val) {
