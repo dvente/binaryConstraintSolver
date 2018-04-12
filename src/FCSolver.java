@@ -110,9 +110,9 @@ public class FCSolver {
                     return true;
                 }
             }
+            undoPruning();
         }
         restoreValue(var, val);
-        undoPruning();
         return false;
     }
 

@@ -62,8 +62,6 @@ public class CSPVariable {
 
     public Set<Integer> getDomain() {
 
-        assert !isAssigned();
-
         return domain;
     }
 
