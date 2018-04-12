@@ -118,24 +118,26 @@ public class FCSolver {
             CSPVariable futureVar = constr.getOtherVar(currentVar);
             Set<Integer> deleted = revise(constr, currentVar);
             consistent = !futureVar.getDomain().isEmpty();
-            if (!consistent) {
-                pruningStack.push(pruned);
-                return false;
-            }
             if (!pruned.keySet().contains(futureVar)) {
                 pruned.put(futureVar, new HashSet<Integer>());
             }
             pruned.get(futureVar).addAll(deleted);
+            if (!consistent) {
+                pruningStack.push(pruned);
+                return false;
+            }
+
         }
         pruningStack.push(pruned);
         return true;
 
     }
-    
+
     @Override
-	public String toString() {
-		return "FCSolver \n" + problem.toString();
-	}
+    public String toString() {
+
+        return "FCSolver \n" + problem.toString();
+    }
 
     private Set<Integer> revise(BinaryConstraint constr, CSPVariable currentVar) {
 
