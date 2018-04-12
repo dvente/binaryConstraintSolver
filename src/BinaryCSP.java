@@ -67,6 +67,11 @@ public final class BinaryCSP {
 
     public boolean isArcConsistent(CSPVariable past, CSPVariable current) {
 
+        if (!constraints.containsKey(past) || !constraints.get(past).containsKey(current)) {
+            return true;
+
+        }
+
         return constraints.get(past).get(current).isConsistent();
 
     }

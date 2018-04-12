@@ -12,6 +12,7 @@ public class FCSolver {
     BinaryCSP problem;
     int branchesExplored;
     List<CSPVariable> varList;
+    //    Deque<CSPVariable> varQueue;
     Stack<Map<CSPVariable, Set<Integer>>> pruningStack;
 
     public FCSolver(BinaryCSP problem) {
@@ -19,6 +20,7 @@ public class FCSolver {
         super();
         this.problem = problem;
         varList = new LinkedList<CSPVariable>(problem.getVars());
+        //        varQueue = new LinkedList<CSPVariable>(problem.getVars());
         pruningStack = new Stack<Map<CSPVariable, Set<Integer>>>();
     }
 
@@ -77,6 +79,7 @@ public class FCSolver {
 
         }
         CSPVariable var = varList.get(0);
+        //        CSPVariable var = varQueue.peek();
         int val = selectValFromDomain(var);
         return branchFCLeft(var, val) || branchFCRight(var, val);
     }
@@ -88,10 +91,13 @@ public class FCSolver {
 
         if (reviseFutureArcs(var)) {
             varList.remove(var);
+            //            varQueue.poll();
             if (forwardChecking()) {
                 return true;
             }
             varList.add(0, var);
+            //            varQueue.offer(var);
+            //            assert varQueue.contains(var);
         }
         unassign(var);
         undoPruning();

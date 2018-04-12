@@ -13,22 +13,21 @@ public class BTSolver {
     public void printSolution() {
 
         StringBuffer result = new StringBuffer();
-        result.append("Nodes explored: " + nodesExplored + "\n");
+        result.append("Branches explored: " + nodesExplored + "\n");
         result.append("Solution: \n");
         for (int i = 0; i < problem.getVars().size(); i++) {
             result.append(problem.getVars().get(i).toString());
         }
         System.out.println(result);
     }
-    
-    
 
     @Override
-	public String toString() {
-		return "BTSolver \n" + problem.toString();
-	}
+    public String toString() {
 
-	public void assign(CSPVariable var, int value) {
+        return "BTSolver \n" + problem.toString();
+    }
+
+    public void assign(CSPVariable var, int value) {
 
         var.assign(value);
         nodesExplored++;
