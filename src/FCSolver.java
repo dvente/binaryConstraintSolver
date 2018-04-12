@@ -1,9 +1,12 @@
 import java.util.Collection;
+import java.util.Deque;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.PriorityQueue;
+import java.util.Queue;
 import java.util.Set;
 import java.util.Stack;
 
@@ -11,16 +14,17 @@ public class FCSolver {
 
     BinaryCSP problem;
     int branchesExplored;
-    List<CSPVariable> varList;
-    //    Deque<CSPVariable> varQueue;
+//    List<CSPVariable> varList;
+    Queue<CSPVariable> varQueue;
     Stack<Map<CSPVariable, Set<Integer>>> pruningStack;
 
     public FCSolver(BinaryCSP problem) {
 
         super();
         this.problem = problem;
-        varList = new LinkedList<CSPVariable>(problem.getVars());
-        //        varQueue = new LinkedList<CSPVariable>(problem.getVars());
+//        varList = new LinkedList<CSPVariable>(problem.getVars());
+                varQueue = new PriorityQueue<CSPVariable>(CSPVariable.SmallestDomainComparator);
+                varQueue.addAll(problem.getVars());
         pruningStack = new Stack<Map<CSPVariable, Set<Integer>>>();
     }
 
@@ -78,8 +82,8 @@ public class FCSolver {
             return true;
 
         }
-        CSPVariable var = varList.get(0);
-        //        CSPVariable var = varQueue.peek();
+//        CSPVariable var = varList.get(0);
+                CSPVariable var = varQueue.peek();
         int val = selectValFromDomain(var);
         return branchFCLeft(var, val) || branchFCRight(var, val);
     }
@@ -90,13 +94,13 @@ public class FCSolver {
         assign(var, val);
 
         if (reviseFutureArcs(var)) {
-            varList.remove(var);
-            //            varQueue.poll();
+//            varList.remove(var);
+                        varQueue.poll();
             if (forwardChecking()) {
                 return true;
             }
-            varList.add(0, var);
-            //            varQueue.offer(var);
+//            varList.add(0, var);
+                        varQueue.offer(var);
             //            assert varQueue.contains(var);
         }
         unassign(var);

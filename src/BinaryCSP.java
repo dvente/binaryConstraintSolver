@@ -6,7 +6,7 @@ import java.util.Map;
 
 public final class BinaryCSP {
 
-    private ArrayList<CSPVariable> varList;
+    private List<CSPVariable> varList;
     private Map<CSPVariable, Map<CSPVariable, BinaryConstraint>> constraints;
 
     public BinaryCSP(CSPVariable[] domainBounds, Map<CSPVariable, Map<CSPVariable, BinaryConstraint>> c) {
@@ -47,7 +47,7 @@ public final class BinaryCSP {
         return varList.get(i);
     }
 
-    public ArrayList<CSPVariable> getVars() {
+    public List<CSPVariable> getVars() {
 
         return varList;
     }

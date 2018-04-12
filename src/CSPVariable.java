@@ -1,4 +1,5 @@
 import java.util.Collection;
+import java.util.Comparator;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -8,6 +9,25 @@ public class CSPVariable {
     private Set<Integer> domain;
     private boolean assigned;
     private int value;
+    
+    public static final Comparator<CSPVariable> NumNameComparator = new Comparator<CSPVariable>(){
+
+		@Override
+		public int compare(CSPVariable arg0, CSPVariable arg1) {
+			return Integer.parseInt(arg0.getName()) - Integer.parseInt(arg1.getName());
+		}
+      
+    };
+    
+    public static final Comparator<CSPVariable> SmallestDomainComparator = new Comparator<CSPVariable>(){
+
+		@Override
+		public int compare(CSPVariable arg0, CSPVariable arg1) {
+			return arg0.getDomain().size() - arg1.getDomain().size();
+		}
+      
+    };
+  
 
     public CSPVariable(String name, int lowerBound, int upperBound) {
 
@@ -101,5 +121,6 @@ public class CSPVariable {
         domain.remove(val);
 
     }
+
 
 }
