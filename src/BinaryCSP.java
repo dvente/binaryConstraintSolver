@@ -69,13 +69,6 @@ public final class BinaryCSP {
 
         return constraints.get(past).get(current).isConsistent();
 
-        //        for (BinaryConstraint constr : getConstraints()) {
-        //            if (constr.getFirstVar() == varList.get(i) && constr.getSecondVar() == varList.get(depth)
-        //                    && !constr.isConsistent()) {
-        //                return false;
-        //            }
-        //        }
-        //        return true;
     }
 
     public boolean completeAssignment() {

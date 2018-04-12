@@ -10,7 +10,7 @@ import java.util.Stack;
 public class FCSolver {
 
     BinaryCSP problem;
-    int nodesExplored;
+    int branchesExplored;
     List<CSPVariable> varList;
     Stack<Map<CSPVariable, Set<Integer>>> pruningStack;
 
@@ -25,7 +25,7 @@ public class FCSolver {
     public void printSolution() {
 
         StringBuffer result = new StringBuffer();
-        result.append("Nodes explored: " + nodesExplored + "\n");
+        result.append("Nodes explored: " + branchesExplored + "\n");
         result.append("Solution: \n");
         for (int i = 0; i < problem.getVars().size(); i++) {
             result.append(problem.getVars().get(i).toString());
@@ -38,7 +38,6 @@ public class FCSolver {
         assert !var.isAssigned();
         assert var.getDomain().contains(value);
         var.setValue(value);
-        nodesExplored++;
         var.setAssigned(true);
     }
 
@@ -84,6 +83,7 @@ public class FCSolver {
 
     public boolean branchFCLeft(CSPVariable var, int val) {
 
+        branchesExplored++;
         assign(var, val);
 
         if (reviseFutureArcs(var)) {
@@ -131,6 +131,11 @@ public class FCSolver {
         return true;
 
     }
+    
+    @Override
+	public String toString() {
+		return "FCSolver \n" + problem.toString();
+	}
 
     private Set<Integer> revise(BinaryConstraint constr, CSPVariable currentVar) {
 
@@ -148,6 +153,7 @@ public class FCSolver {
 
     public boolean branchFCRight(CSPVariable var, int val) {
 
+        branchesExplored++;
         var.removeFromDomain(val);
 
         if (!var.getDomain().isEmpty()) {

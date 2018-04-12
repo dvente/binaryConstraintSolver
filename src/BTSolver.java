@@ -20,8 +20,15 @@ public class BTSolver {
         }
         System.out.println(result);
     }
+    
+    
 
-    public void assign(CSPVariable var, int value) {
+    @Override
+	public String toString() {
+		return "BTSolver \n" + problem.toString();
+	}
+
+	public void assign(CSPVariable var, int value) {
 
         var.assign(value);
         nodesExplored++;
