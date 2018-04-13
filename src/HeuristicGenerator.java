@@ -18,7 +18,7 @@ public class HeuristicGenerator {
 
         this.CSPlocation = CSPLocation;
         BinaryCSPReader reader = new BinaryCSPReader();
-        System.out.println(CSPLocation);
+        //        System.out.println(CSPLocation);
         problem = reader.readBinaryCSP(CSPLocation);
         fileName = CSPlocation.substring(0, CSPlocation.lastIndexOf('.'));
     }

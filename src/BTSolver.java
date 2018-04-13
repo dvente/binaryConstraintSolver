@@ -12,6 +12,8 @@ public class BTSolver {
 
     public void printSolution() {
 
+        assert problem.isConsistent();
+
         StringBuffer result = new StringBuffer();
         result.append("Branches explored: " + nodesExplored + "\n");
         result.append("Solution: \n");

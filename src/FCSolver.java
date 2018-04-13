@@ -130,7 +130,7 @@ public class FCSolver {
         assign(var, val);
 
         if (reviseFutureArcs(var)) {
-            varQueue.poll();
+            varQueue.remove(var);
             if (forwardChecking()) {
                 return true;
             }
