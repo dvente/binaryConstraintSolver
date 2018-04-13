@@ -1,8 +1,10 @@
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Queue;
 
 public final class BinaryCSP {
 
@@ -95,10 +97,20 @@ public final class BinaryCSP {
     }
 
     public Map<CSPVariable, Map<CSPVariable, BinaryConstraint>> getContraints() {
-
+    	
         return constraints;
     }
 
+    public Queue<BinaryConstraint> getContraintQueue() {
+    	Queue<BinaryConstraint> q = new LinkedList<BinaryConstraint>();
+    	for(CSPVariable first: constraints.keySet()) {
+    		for(CSPVariable second: constraints.get(first).keySet()) {
+    			q.offer(constraints.get(first).get(second));
+    		}
+    	}
+        return q;
+    }
+    
     public Collection<BinaryConstraint> getContraints(CSPVariable currentVar) {
 
         List<BinaryConstraint> c = new ArrayList<BinaryConstraint>();
