@@ -37,11 +37,6 @@ public final class BinaryCSP {
         return varList.size();
     }
 
-    //    public ArrayList<BinaryConstraint> getConstraints() {
-    //
-    //        return constraints;
-    //    }
-
     public CSPVariable getVar(int i) {
 
         return varList.get(i);

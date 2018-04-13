@@ -1,4 +1,5 @@
 import java.util.Collection;
+import java.util.Comparator;
 import java.util.Deque;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -17,13 +18,32 @@ public class FCSolver {
 //    List<CSPVariable> varList;
     Queue<CSPVariable> varQueue;
     Stack<Map<CSPVariable, Set<Integer>>> pruningStack;
+    
+    public final Comparator<CSPVariable> SmallestDomainComparator = new Comparator<CSPVariable>(){
+
+		@Override
+		public int compare(CSPVariable arg0, CSPVariable arg1) {
+			return arg0.getDomain().size() - arg1.getDomain().size();
+		}
+      
+    };
+    
+    // use for static orderings
+    public final Comparator<CSPVariable> OrderComparator = new Comparator<CSPVariable>(){
+
+		@Override
+		public int compare(CSPVariable arg0, CSPVariable arg1) {
+			return arg0.getOrder() - arg1.getOrder();
+		}
+      
+    };
 
     public FCSolver(BinaryCSP problem) {
 
         super();
         this.problem = problem;
 //        varList = new LinkedList<CSPVariable>(problem.getVars());
-                varQueue = new PriorityQueue<CSPVariable>(CSPVariable.SmallestDomainComparator);
+                varQueue = new PriorityQueue<CSPVariable>(SmallestDomainComparator);
                 varQueue.addAll(problem.getVars());
         pruningStack = new Stack<Map<CSPVariable, Set<Integer>>>();
     }

@@ -9,29 +9,14 @@ public class CSPVariable {
     private Set<Integer> domain;
     private boolean assigned;
     private int value;
+    private final int order;
     
-    public static final Comparator<CSPVariable> NumNameComparator = new Comparator<CSPVariable>(){
+   
 
-		@Override
-		public int compare(CSPVariable arg0, CSPVariable arg1) {
-			return Integer.parseInt(arg0.getName()) - Integer.parseInt(arg1.getName());
-		}
-      
-    };
-    
-    public static final Comparator<CSPVariable> SmallestDomainComparator = new Comparator<CSPVariable>(){
-
-		@Override
-		public int compare(CSPVariable arg0, CSPVariable arg1) {
-			return arg0.getDomain().size() - arg1.getDomain().size();
-		}
-      
-    };
-  
-
-    public CSPVariable(String name, int lowerBound, int upperBound) {
+    public CSPVariable(String name, int order, int lowerBound, int upperBound) {
 
         domain = new HashSet<Integer>();
+        this.order = order;
         this.name = name;
         for (int i = lowerBound; i <= upperBound; i++) {
             domain.add(i);
@@ -39,9 +24,10 @@ public class CSPVariable {
         setAssigned(false);
     }
 
-    public CSPVariable(String name, Collection<Integer> domain) {
+    public CSPVariable(String name, int order, Collection<Integer> domain) {
 
         this.name = name;
+        this.order = order;
         this.domain.addAll(domain);
         setAssigned(false);
     }
@@ -121,6 +107,10 @@ public class CSPVariable {
         domain.remove(val);
 
     }
+
+	public int getOrder() {
+		return order;
+	}
 
 
 }
