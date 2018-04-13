@@ -35,7 +35,7 @@ public final class BinaryCSP {
     public int getNoVariables() {
 
         return varList.size();
-    }
+    } 
 
     public CSPVariable getVar(int i) {
 

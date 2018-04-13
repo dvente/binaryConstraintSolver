@@ -49,12 +49,24 @@ public final class BinaryConstraint {
 
         CSPVariable currentVar = getOtherVar(futureVar);
         if (currentVar.isAssigned()) {
-            BinaryTuple tup = new BinaryTuple(currentVar.getValue(), val);
+        	BinaryTuple tup;
+        	if(currentVar.equals(firstVar)) {
+        		tup = new BinaryTuple(currentVar.getValue(), val);
+        	} else {
+        		tup = new BinaryTuple(val,currentVar.getValue());
+        	}
+
             boolean isSupported = tuples.contains(tup);
             return isSupported;
         } else {
             for (int currentVal : currentVar.getDomain()) {
-                if (tuples.contains(new BinaryTuple(currentVal, val))) {
+            	BinaryTuple tup;
+            	if(currentVar.equals(firstVar)) {
+            		tup = new BinaryTuple(currentVal, val);
+            	} else {
+            		tup = new BinaryTuple(val,currentVal);
+            	}
+                if (tuples.contains(tup)) {
                     return true;
                 }
             }

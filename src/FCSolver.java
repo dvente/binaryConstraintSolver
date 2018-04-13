@@ -130,6 +130,7 @@ public class FCSolver {
         assign(var, val);
 
         if (reviseFutureArcs(var)) {
+//        	assert problem.isConsistent();
             varQueue.remove(var);
             assert !varQueue.contains(var);
             if (forwardChecking()) {
@@ -151,6 +152,7 @@ public class FCSolver {
 
         if (!var.getDomain().isEmpty()) {
             if (reviseFutureArcs(var)) {
+//            	assert problem.isConsistent();
                 if (forwardChecking()) {
                     return true;
                 }
