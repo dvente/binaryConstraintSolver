@@ -1,5 +1,4 @@
 import java.util.Collection;
-import java.util.Comparator;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -10,8 +9,25 @@ public class CSPVariable {
     private boolean assigned;
     private int value;
     private final int order;
-    
-   
+
+    public CSPVariable(String name, int lowerBound, int upperBound) {
+
+        domain = new HashSet<Integer>();
+        this.order = -1;
+        this.name = name;
+        for (int i = lowerBound; i <= upperBound; i++) {
+            domain.add(i);
+        }
+        setAssigned(false);
+    }
+
+    public CSPVariable(String name, Collection<Integer> domain) {
+
+        this.name = name;
+        this.order = -1;
+        this.domain.addAll(domain);
+        setAssigned(false);
+    }
 
     public CSPVariable(String name, int order, int lowerBound, int upperBound) {
 
@@ -108,9 +124,9 @@ public class CSPVariable {
 
     }
 
-	public int getOrder() {
-		return order;
-	}
+    public int getOrder() {
 
+        return order;
+    }
 
 }
