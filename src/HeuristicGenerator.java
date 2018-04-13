@@ -69,8 +69,9 @@ public class HeuristicGenerator {
 
         Map<String, Integer> h = new HashMap<String, Integer>();
         int i = 0;
+
         List<CSPVariable> varList = problem.getVars();
-        varList.sort(new Comparator<CSPVariable>() {
+        Collections.sort(varList, new Comparator<CSPVariable>() {
 
             @Override
             public int compare(CSPVariable o1, CSPVariable o2) {

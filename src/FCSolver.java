@@ -131,10 +131,12 @@ public class FCSolver {
 
         if (reviseFutureArcs(var)) {
             varQueue.remove(var);
+            assert !varQueue.contains(var);
             if (forwardChecking()) {
                 return true;
             }
             varQueue.offer(var);
+            assert varQueue.contains(var);
         }
         unassign(var);
         undoPruning();

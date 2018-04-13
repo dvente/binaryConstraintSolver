@@ -101,17 +101,17 @@ public final class BinaryCSP {
 
     public Collection<BinaryConstraint> getContraints(CSPVariable currentVar) {
 
+        List<BinaryConstraint> c = new ArrayList<BinaryConstraint>();
+
         if (constraints.containsKey(currentVar)) {
-            return constraints.get(currentVar).values();
-        } else {
-            List<BinaryConstraint> c = new ArrayList<BinaryConstraint>();
-            for (CSPVariable first : constraints.keySet()) {
-                if (constraints.get(first).containsKey(currentVar)) {
-                    c.add(constraints.get(first).get(currentVar));
-                }
-            }
-            return c;
+            c.addAll(constraints.get(currentVar).values());
         }
+        for (CSPVariable first : constraints.keySet()) {
+            if (constraints.get(first).containsKey(currentVar)) {
+                c.add(constraints.get(first).get(currentVar));
+            }
+        }
+        return c;
     }
 
 }

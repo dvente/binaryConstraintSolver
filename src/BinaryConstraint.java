@@ -1,4 +1,3 @@
-import java.util.ArrayList;
 import java.util.Set;
 
 public final class BinaryConstraint {
@@ -27,39 +26,40 @@ public final class BinaryConstraint {
     public String toString() {
 
         StringBuffer result = new StringBuffer();
-        result.append("c(" + firstVar.getName() + ", " + secondVar.getName() + ")\n");
-        for (BinaryTuple bt : tuples) {
-            result.append(bt + "\n");
-        }
+        result.append("c(" + firstVar.getName() + ", " + secondVar.getName() + ")");
+        //        for (BinaryTuple bt : tuples) {
+        //            result.append(bt + "\n");
+        //        }
         return result.toString();
     }
 
     // SUGGESTION: You will want to add methods here to reason about the constraint
 
     public CSPVariable getOtherVar(CSPVariable var) {
-    	if(var == firstVar) {
-    		return secondVar;
-    	} else if(var == secondVar) {
-    		return firstVar;
-    	}
-    	return null;
+
+        if (var == firstVar) {
+            return secondVar;
+        } else if (var == secondVar) {
+            return firstVar;
+        }
+        return null;
     }
-    
+
     public boolean isSupported(CSPVariable futureVar, int val) {
-    	
-    	CSPVariable currentVar = getOtherVar(futureVar);
-    	if(currentVar.isAssigned()) {
-    		BinaryTuple tup = new BinaryTuple(currentVar.getValue(),val);
-    		boolean isSupported = tuples.contains(tup); 
-    		return isSupported;
-    	} else {
-    		for(int currentVal : currentVar.getDomain()) {
-    			if(tuples.contains(new BinaryTuple(currentVal,val))) {
-    				return true;
-    			}
-    		}
-    		return false;
-    	}
+
+        CSPVariable currentVar = getOtherVar(futureVar);
+        if (currentVar.isAssigned()) {
+            BinaryTuple tup = new BinaryTuple(currentVar.getValue(), val);
+            boolean isSupported = tuples.contains(tup);
+            return isSupported;
+        } else {
+            for (int currentVal : currentVar.getDomain()) {
+                if (tuples.contains(new BinaryTuple(currentVal, val))) {
+                    return true;
+                }
+            }
+            return false;
+        }
 
     }
 

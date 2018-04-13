@@ -39,7 +39,7 @@ for file in os.listdir(cspFolder):
         call("echo \"" + lineOut + "\" >> "+logFile,shell=True)
 
         for h in heuristics:
-            FCOutput = check_output("java -classpath -ea " + binFolder + " -ea FCSolver " + cspFolder + file + " " + cspFolder+problem+h+".csph",shell=True)
+            FCOutput = check_output("java -classpath " + binFolder + " -ea FCSolver " + cspFolder + file + " " + cspFolder+problem+h+".csph",shell=True)
             branchSearch = branchPatern.search(FCOutput)
             nodesExplored = branchSearch.group(1)
             arcSearch = arcPatern.search(FCOutput)    
