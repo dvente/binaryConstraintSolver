@@ -12,19 +12,10 @@ public class FCSolver {
 
     BinaryCSP problem;
     int branchesExplored;
+    int arcsRevised;
     //    List<CSPVariable> varList;
     Queue<CSPVariable> varQueue;
     Stack<Map<CSPVariable, Set<Integer>>> pruningStack;
-
-    public final Comparator<CSPVariable> IntNameComparator = new Comparator<CSPVariable>() {
-
-        @Override
-        public int compare(CSPVariable arg0, CSPVariable arg1) {
-
-            return Integer.parseInt(arg0.getName()) - Integer.parseInt(arg1.getName());
-        }
-
-    };
 
     public final Comparator<CSPVariable> SmallestDomainComparator = new Comparator<CSPVariable>() {
 
@@ -47,12 +38,16 @@ public class FCSolver {
 
     };
 
-    public FCSolver(BinaryCSP problem) {
+    public FCSolver(BinaryCSP problem, boolean dynamicOrdering) {
 
         super();
         this.problem = problem;
-        //        varList = new LinkedList<CSPVariable>(problem.getVars());
-        varQueue = new PriorityQueue<CSPVariable>(SmallestDomainComparator);
+        if (dynamicOrdering) {
+            varQueue = new PriorityQueue<CSPVariable>(SmallestDomainComparator);
+        } else {
+            varQueue = new PriorityQueue<CSPVariable>(OrderComparator);
+        }
+
         varQueue.addAll(problem.getVars());
         pruningStack = new Stack<Map<CSPVariable, Set<Integer>>>();
     }
@@ -60,7 +55,8 @@ public class FCSolver {
     public void printSolution() {
 
         StringBuffer result = new StringBuffer();
-        result.append("Nodes explored: " + branchesExplored + "\n");
+        result.append("Branches explored: " + branchesExplored + "\n");
+        result.append("Arcs Revised: " + arcsRevised + "\n");
         result.append("Solution: \n");
         for (int i = 0; i < problem.getVars().size(); i++) {
             result.append(problem.getVars().get(i).toString());
@@ -84,9 +80,20 @@ public class FCSolver {
     public static void main(String[] args) {
 
         String CSPLocation = args[0];
+        String heuristicLocation;
+        FCSolver solver;
         BinaryCSPReader reader = new BinaryCSPReader();
         System.out.println(CSPLocation);
-        FCSolver solver = new FCSolver(reader.readBinaryCSP(CSPLocation));
+        if (args.length != 2) {
+
+            solver = new FCSolver(reader.readBinaryCSP(CSPLocation), true);
+            System.out.println("Smallest Domain");
+        } else {
+            heuristicLocation = args[1];
+            solver = new FCSolver(reader.readBinaryCSP(CSPLocation, heuristicLocation), false);
+            System.out.println(heuristicLocation);
+        }
+
         solver.solveCurrentProblem();
     }
 
@@ -107,11 +114,11 @@ public class FCSolver {
     public boolean forwardChecking() {
 
         if (problem.completeAssignment()) {
+            assert problem.isConsistent();
             printSolution();
             return true;
 
         }
-        //        CSPVariable var = varList.get(0);
         CSPVariable var = varQueue.peek();
         int val = selectValFromDomain(var);
         return branchFCLeft(var, val) || branchFCRight(var, val);
@@ -123,14 +130,11 @@ public class FCSolver {
         assign(var, val);
 
         if (reviseFutureArcs(var)) {
-            //            varList.remove(var);
             varQueue.poll();
             if (forwardChecking()) {
                 return true;
             }
-            //            varList.add(0, var);
             varQueue.offer(var);
-            //            assert varQueue.contains(var);
         }
         unassign(var);
         undoPruning();
@@ -178,6 +182,9 @@ public class FCSolver {
             }
         }
         futureVar.removeFromDomain(toDelete);
+        if (!toDelete.isEmpty()) {
+            arcsRevised++;
+        }
 
         return toDelete;
     }

@@ -71,6 +71,20 @@ public final class BinaryCSP {
 
     }
 
+    public boolean isConsistent() {
+
+        boolean consistent = true;
+        for (CSPVariable first : constraints.keySet()) {
+            for (CSPVariable second : constraints.get(first).keySet()) {
+                BinaryConstraint bc = constraints.get(first).get(second);
+                consistent = consistent && bc.isConsistent();
+
+            }
+        }
+
+        return consistent;
+    }
+
     public boolean completeAssignment() {
 
         boolean done = true;

@@ -1,8 +1,9 @@
+import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.StreamTokenizer;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -16,6 +17,7 @@ public final class BinaryCSPReader {
 
     private FileReader inFR;
     private StreamTokenizer in;
+    private Map<String, Integer> heuristicOrdering;
 
     /**
      * Main (for testing)
@@ -27,7 +29,7 @@ public final class BinaryCSPReader {
             return;
         }
         BinaryCSPReader reader = new BinaryCSPReader();
-        System.out.println(reader.readBinaryCSP(args[0]));
+        System.out.println(reader.readBinaryCSP(args[0], args[1]));
     }
 
     /**
@@ -36,6 +38,40 @@ public final class BinaryCSPReader {
      * the list of constraints c(<varno>, <varno>) binary tuples <domain val>,
      * <domain val>
      */
+    public BinaryCSP readBinaryCSP(String fn, String heuristicLocation) {
+
+        try {
+            heuristicOrdering = readHeuristic(heuristicLocation);
+            inFR = new FileReader(fn);
+            in = new StreamTokenizer(inFR);
+            in.ordinaryChar('(');
+            in.ordinaryChar(')');
+            in.nextToken(); // n
+            int n = (int) in.nval;
+            CSPVariable[] vars = new CSPVariable[n];
+            for (int i = 0; i < n; i++) {
+                in.nextToken(); // ith ub
+                int lower = (int) in.nval;
+                in.nextToken(); // ','
+                in.nextToken();
+                int upper = (int) in.nval;
+                vars[i] = new CSPVariable(Integer.toString(i), heuristicOrdering.get(Integer.toString(i)), lower,
+                        upper);
+            }
+            Map<CSPVariable, Map<CSPVariable, BinaryConstraint>> constraints = readBinaryConstraints(vars);
+            BinaryCSP csp = new BinaryCSP(vars, constraints);
+            // TESTING:
+            // System.out.println(csp) ;
+            inFR.close();
+            return csp;
+        } catch (FileNotFoundException e) {
+            System.out.println(e);
+        } catch (IOException e) {
+            System.out.println(e);
+        }
+        return null;
+    }
+
     public BinaryCSP readBinaryCSP(String fn) {
 
         try {
@@ -66,6 +102,24 @@ public final class BinaryCSPReader {
             System.out.println(e);
         }
         return null;
+    }
+
+    private Map<String, Integer> readHeuristic(String heuristicLocation) throws FileNotFoundException, IOException {
+
+        Map<String, Integer> h = new HashMap<String, Integer>();
+        File heuristicFile = new File(heuristicLocation);
+        try (FileReader reader = new FileReader(heuristicFile);
+                BufferedReader bufferedReader = new BufferedReader(reader)) {
+            String line;
+            while ((line = bufferedReader.readLine()) != null) {
+                String name = line.substring(0, line.lastIndexOf(","));
+                int order = Integer.parseInt(line.substring(line.lastIndexOf(",") + 1, line.length()));
+                h.put(name, order);
+
+            }
+
+        }
+        return h;
     }
 
     /**
