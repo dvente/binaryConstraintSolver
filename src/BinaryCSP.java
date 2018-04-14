@@ -9,12 +9,12 @@ import java.util.Queue;
 public final class BinaryCSP {
 
     private List<CSPVariable> varList;
-    private Map<CSPVariable, Map<CSPVariable, BinaryConstraint>> constraints;
+    private Map<CSPVariable, Map<CSPVariable, BinaryArc>> arcs;
 
-    public BinaryCSP(CSPVariable[] domainBounds, Map<CSPVariable, Map<CSPVariable, BinaryConstraint>> c) {
+    public BinaryCSP(CSPVariable[] domainBounds, Map<CSPVariable, Map<CSPVariable, BinaryArc>> c) {
 
         varList = new ArrayList<CSPVariable>(Arrays.asList(domainBounds));
-        constraints = c;
+        arcs = c;
     }
 
     @Override
@@ -23,11 +23,11 @@ public final class BinaryCSP {
         StringBuffer result = new StringBuffer();
         result.append("CSP:\n");
         for (int i = 0; i < varList.size(); i++) {
-            result.append(varList.get(i).toString());
+            result.append(varList.get(i).toString() + "\n");
         }
-        for (Map<CSPVariable, BinaryConstraint> bcMap : constraints.values()) {
-            for (BinaryConstraint bc : bcMap.values()) {
-                result.append(bc + "\n");
+        for (Map<CSPVariable, BinaryArc> baMap : arcs.values()) {
+            for (BinaryArc ba : baMap.values()) {
+                result.append(ba + "\n");
             }
 
         }
@@ -51,35 +51,34 @@ public final class BinaryCSP {
 
     public boolean isArcConsistent() {
 
-        for (Map<CSPVariable, BinaryConstraint> bcMap : constraints.values()) {
-            for (BinaryConstraint bc : bcMap.values()) {
-                if (!bc.isConsistent()) {
+        for (Map<CSPVariable, BinaryArc> baMap : arcs.values()) {
+            for (BinaryArc ba : baMap.values()) {
+                if (!ba.isConsistent()) {
                     return false;
                 }
             }
-
         }
         return true;
     }
 
     public boolean isArcConsistent(CSPVariable past, CSPVariable current) {
 
-        if (!constraints.containsKey(past) || !constraints.get(past).containsKey(current)) {
+        if (!arcs.containsKey(past) || !arcs.get(past).containsKey(current)) {
             return true;
 
         }
 
-        return constraints.get(past).get(current).isConsistent();
+        return arcs.get(past).get(current).isConsistent();
 
     }
 
     public boolean isConsistent() {
 
         boolean consistent = true;
-        for (CSPVariable first : constraints.keySet()) {
-            for (CSPVariable second : constraints.get(first).keySet()) {
-                BinaryConstraint bc = constraints.get(first).get(second);
-                consistent = consistent && bc.isConsistent();
+        for (CSPVariable first : arcs.keySet()) {
+            for (CSPVariable second : arcs.get(first).keySet()) {
+                BinaryArc ba = arcs.get(first).get(second);
+                consistent = consistent && ba.isConsistent();
 
             }
         }
@@ -96,31 +95,38 @@ public final class BinaryCSP {
         return done;
     }
 
-    public Map<CSPVariable, Map<CSPVariable, BinaryConstraint>> getContraints() {
+    public Map<CSPVariable, Map<CSPVariable, BinaryArc>> getArcs() {
     	
-        return constraints;
+        return arcs;
     }
 
-    public Queue<BinaryConstraint> getContraintQueue() {
-    	Queue<BinaryConstraint> q = new LinkedList<BinaryConstraint>();
-    	for(CSPVariable first: constraints.keySet()) {
-    		for(CSPVariable second: constraints.get(first).keySet()) {
-    			q.offer(constraints.get(first).get(second));
+    public Queue<BinaryArc> getArcQueue() {
+    	Queue<BinaryArc> q = new LinkedList<BinaryArc>();
+    	for(CSPVariable first: arcs.keySet()) {
+    		for(CSPVariable second: arcs.get(first).keySet()) {
+    			q.offer(arcs.get(first).get(second));
     		}
     	}
         return q;
     }
     
-    public Collection<BinaryConstraint> getContraints(CSPVariable currentVar) {
+    public Collection<BinaryArc> getOutgoingArcs(CSPVariable currentVar) {
 
-        List<BinaryConstraint> c = new ArrayList<BinaryConstraint>();
+        List<BinaryArc> c = new ArrayList<BinaryArc>();
 
-        if (constraints.containsKey(currentVar)) {
-            c.addAll(constraints.get(currentVar).values());
+        if (arcs.containsKey(currentVar)) {
+            c.addAll(arcs.get(currentVar).values());
         }
-        for (CSPVariable first : constraints.keySet()) {
-            if (constraints.get(first).containsKey(currentVar)) {
-                c.add(constraints.get(first).get(currentVar));
+        return c;
+    }
+    
+    public Collection<BinaryArc> getIncomingArcs(CSPVariable currentVar) {
+
+        List<BinaryArc> c = new ArrayList<BinaryArc>();
+
+        for (CSPVariable first : arcs.keySet()) {
+            if (arcs.get(first).containsKey(currentVar)) {
+                c.add(arcs.get(first).get(currentVar));
             }
         }
         return c;

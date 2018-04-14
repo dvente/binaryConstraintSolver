@@ -4,9 +4,38 @@ import java.util.Set;
 
 public class CSPVariable {
 
-    private String name;
+    private final String name;
     private Set<Integer> domain;
-    private boolean assigned;
+    
+ 
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((name == null) ? 0 : name.hashCode());
+		return result;
+	}
+
+
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		CSPVariable other = (CSPVariable) obj;
+		if (name == null) {
+			if (other.name != null)
+				return false;
+		} else if (!name.equals(other.name))
+			return false;
+		return true;
+	}
+
+	private boolean assigned;
     private int value;
     private final int order;
 
@@ -21,7 +50,9 @@ public class CSPVariable {
         setAssigned(false);
     }
 
-    public CSPVariable(String name, Collection<Integer> domain) {
+
+
+	public CSPVariable(String name, Collection<Integer> domain) {
 
         this.name = name;
         this.order = -1;
@@ -91,13 +122,13 @@ public class CSPVariable {
     public String toString() {
 
         if (isAssigned()) {
-            return "Var " + name + ": " + Integer.toString(getValue()) + "\n";
+            return "Var " + name + ": " + Integer.toString(getValue());
         } else {
             String ans = "Var " + name + ": ";
             for (int val : domain) {
                 ans += Integer.toString(val) + ", ";
             }
-            return ans + "\n";
+            return ans;
         }
 
     }

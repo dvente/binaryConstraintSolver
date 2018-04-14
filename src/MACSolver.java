@@ -81,16 +81,16 @@ public class MACSolver {
 
         String CSPLocation = args[0];
         String heuristicLocation;
-        FCSolver solver;
+        MACSolver solver;
         BinaryCSPReader reader = new BinaryCSPReader();
         System.out.println(CSPLocation);
         if (args.length != 2) {
 
-            solver = new FCSolver(reader.readBinaryCSP(CSPLocation), true);
+            solver = new MACSolver(reader.readBinaryCSP(CSPLocation), true);
             System.out.println("Smallest Domain");
         } else {
             heuristicLocation = args[1];
-            solver = new FCSolver(reader.readBinaryCSP(CSPLocation, heuristicLocation), false);
+            solver = new MACSolver(reader.readBinaryCSP(CSPLocation, heuristicLocation), false);
             System.out.println(heuristicLocation);
         }
 
@@ -111,14 +111,13 @@ public class MACSolver {
     }
     
     public boolean AC3() {
-		Queue<BinaryConstraint> q = problem.getContraintQueue();
+    	Map<CSPVariable, Set<Integer>> pruned = new HashMap<CSPVariable, Set<Integer>>();
+		Queue<BinaryArc> q = problem.getArcQueue();
 		while(!q.isEmpty()) {
-			BinaryConstraint bc = q.poll();
-			Set<Integer> deleted = revise(bc,bc.getFirstVar());
+			BinaryArc arc = q.poll();
+			Set<Integer> deleted = revise(arc);
 			
 			
-//            CSPVariable futureVar = constr.getOtherVar(currentVar);
-//            Set<Integer> deleted = revise(constr, currentVar);
 //            consistent = !futureVar.getDomain().isEmpty();
 //            if (!pruned.keySet().contains(futureVar)) {
 //                pruned.put(futureVar, new HashSet<Integer>());
@@ -133,10 +132,11 @@ public class MACSolver {
 //        
 			
 			if(!deleted.isEmpty()){
-				for(BinaryConstraint bc2: problem.getContraints().get(bc.getFirstVar()).values()) {
-					
+				for(BinaryArc newArc: problem.getArcs().get(arc.getDestination()).values()) {
+					if(!newArc.equals(arc.reverse())) {
+						q.offer(newArc);
+					}	
 				}
-				//Add to q all arcs(xh, xi) (h != j)
 			}
 			else {
 				pruningStack.push(pruned);
@@ -206,19 +206,18 @@ public class MACSolver {
         }
     }
 
-    private Set<Integer> revise(BinaryConstraint constr, CSPVariable currentVar) {
+    private Set<Integer> revise(BinaryArc arc) {
 
-        CSPVariable futureVar = constr.getOtherVar(currentVar);
         Set<Integer> toDelete = new HashSet<Integer>();
-        if (futureVar.isAssigned()) {
+        if (arc.getDestination().isAssigned()) {
             return toDelete;
         }
-        for (int futureVal : futureVar.getDomain()) {
-            if (!constr.isSupported(futureVar, futureVal)) {
+        for (int futureVal : arc.getDestination().getDomain()) {
+            if (!arc.isSupported(futureVal)) {
                 toDelete.add(futureVal);
             }
         }
-        futureVar.removeFromDomain(toDelete);
+        arc.getDestination().removeFromDomain(toDelete);
         if (!toDelete.isEmpty()) {
             arcsRevised++;
         }

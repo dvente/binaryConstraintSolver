@@ -4,7 +4,7 @@ public final class BinaryConstraint {
 
     private CSPVariable firstVar, secondVar;
     private Set<BinaryTuple> tuples;
-
+ 
     public BinaryConstraint(CSPVariable firstVar, CSPVariable secondVar, Set<BinaryTuple> t) {
 
         this.firstVar = firstVar;
@@ -32,8 +32,6 @@ public final class BinaryConstraint {
         //        }
         return result.toString();
     }
-
-    // SUGGESTION: You will want to add methods here to reason about the constraint
 
     public CSPVariable getOtherVar(CSPVariable var) {
 

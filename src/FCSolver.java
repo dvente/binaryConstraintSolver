@@ -13,7 +13,6 @@ public class FCSolver {
     BinaryCSP problem;
     int branchesExplored;
     int arcsRevised;
-    //    List<CSPVariable> varList;
     Queue<CSPVariable> varQueue;
     Stack<Map<CSPVariable, Set<Integer>>> pruningStack;
 
@@ -59,7 +58,7 @@ public class FCSolver {
         result.append("Arcs Revised: " + arcsRevised + "\n");
         result.append("Solution: \n");
         for (int i = 0; i < problem.getVars().size(); i++) {
-            result.append(problem.getVars().get(i).toString());
+            result.append(problem.getVars().get(i).toString() + "\n");
         }
         System.out.println(result);
     }
@@ -170,34 +169,33 @@ public class FCSolver {
         }
     }
 
-    private Set<Integer> revise(BinaryConstraint constr, CSPVariable currentVar) {
+    private Set<Integer> revise(BinaryArc arc) {
 
-        CSPVariable futureVar = constr.getOtherVar(currentVar);
         Set<Integer> toDelete = new HashSet<Integer>();
-        if (futureVar.isAssigned()) {
+        if (arc.getDestination().isAssigned()) {
             return toDelete;
         }
-        for (int futureVal : futureVar.getDomain()) {
-            if (!constr.isSupported(futureVar, futureVal)) {
+        for (int futureVal : arc.getDestination().getDomain()) {
+            if (!arc.isSupported(futureVal)) {
                 toDelete.add(futureVal);
             }
         }
-        futureVar.removeFromDomain(toDelete);
+        arc.getDestination().removeFromDomain(toDelete);
         if (!toDelete.isEmpty()) {
             arcsRevised++;
         }
 
         return toDelete;
-    }
+    } 
 
     private boolean reviseFutureArcs(CSPVariable currentVar) {
 
         Map<CSPVariable, Set<Integer>> pruned = new HashMap<CSPVariable, Set<Integer>>();
         boolean consistent = true;
-        Collection<BinaryConstraint> arcsToRevise = problem.getContraints(currentVar);
-        for (BinaryConstraint constr : arcsToRevise) {
-            CSPVariable futureVar = constr.getOtherVar(currentVar);
-            Set<Integer> deleted = revise(constr, currentVar);
+        Collection<BinaryArc> arcsToRevise = problem.getOutgoingArcs(currentVar);
+        for (BinaryArc arc : arcsToRevise) {
+            CSPVariable futureVar = arc.getDestination();
+            Set<Integer> deleted = revise(arc);
             consistent = !futureVar.getDomain().isEmpty();
             if (!pruned.keySet().contains(futureVar)) {
                 pruned.put(futureVar, new HashSet<Integer>());

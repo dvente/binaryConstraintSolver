@@ -58,7 +58,7 @@ public final class BinaryCSPReader {
                 vars[i] = new CSPVariable(Integer.toString(i), heuristicOrdering.get(Integer.toString(i)), lower,
                         upper);
             }
-            Map<CSPVariable, Map<CSPVariable, BinaryConstraint>> constraints = readBinaryConstraints(vars);
+            Map<CSPVariable, Map<CSPVariable, BinaryArc>> constraints = readBinaryConstraints(vars);
             BinaryCSP csp = new BinaryCSP(vars, constraints);
             // TESTING:
             // System.out.println(csp) ;
@@ -90,7 +90,7 @@ public final class BinaryCSPReader {
                 int upper = (int) in.nval;
                 vars[i] = new CSPVariable(Integer.toString(i), lower, upper);
             }
-            Map<CSPVariable, Map<CSPVariable, BinaryConstraint>> constraints = readBinaryConstraints(vars);
+            Map<CSPVariable, Map<CSPVariable, BinaryArc>> constraints = readBinaryConstraints(vars);
             BinaryCSP csp = new BinaryCSP(vars, constraints);
             // TESTING:
             // System.out.println(csp) ;
@@ -125,9 +125,9 @@ public final class BinaryCSPReader {
     /**
      * @param vars
      */
-    private Map<CSPVariable, Map<CSPVariable, BinaryConstraint>> readBinaryConstraints(CSPVariable[] vars) {
+    private Map<CSPVariable, Map<CSPVariable, BinaryArc>> readBinaryConstraints(CSPVariable[] vars) {
 
-        Map<CSPVariable, Map<CSPVariable, BinaryConstraint>> constraints = new HashMap<CSPVariable, Map<CSPVariable, BinaryConstraint>>();
+        Map<CSPVariable, Map<CSPVariable, BinaryArc>> constraints = new HashMap<CSPVariable, Map<CSPVariable, BinaryArc>>();
 
         try {
             in.nextToken(); //'c' or EOF
@@ -152,11 +152,17 @@ public final class BinaryCSPReader {
                     tuples.add(new BinaryTuple(val1, val2));
                     in.nextToken(); //1stallowed val of next tuple/c/EOF
                 }
-                BinaryConstraint c = new BinaryConstraint(var1, var2, tuples);
-                if (!constraints.keySet().contains(var1)) {
-                    constraints.put(var1, new HashMap<CSPVariable, BinaryConstraint>());
+                BinaryArc c = new BinaryArc(var1, var2, tuples);
+                if (!constraints.containsKey(var1)) {
+                    constraints.put(var1, new HashMap<CSPVariable, BinaryArc>());
                 }
                 constraints.get(var1).put(var2, c);
+                
+                c = c.reverse();
+                if (!constraints.containsKey(var2)) {
+                    constraints.put(var2, new HashMap<CSPVariable, BinaryArc>());
+                }
+                constraints.get(var2).put(var1, c);
 
             }
 
