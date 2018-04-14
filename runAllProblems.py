@@ -21,12 +21,12 @@ for file in os.listdir(cspFolder):
     if(problemPatern.match(file)):
         problem = os.path.splitext(file)[0]
         print(problem)
-        # BTOutput = check_output("java -classpath " + binFolder + " -ea BTSolver " + cspFolder + file ,shell=True)
-        # branchSearch = branchPatern.search(BTOutput)
-        # nodesExplored = branchSearch.group(1)
-        # arcsRevised = 0
-        # lineOut = "Backtracking,None," + problem + ", " + str(nodesExplored) + ", " + str(arcsRevised)
-        # call("echo \"" + lineOut + "\" >> "+logFile,shell=True)
+        BTOutput = check_output("java -classpath " + binFolder + " -ea BTSolver " + cspFolder + file ,shell=True)
+        branchSearch = branchPatern.search(BTOutput)
+        nodesExplored = branchSearch.group(1)
+        arcsRevised = 0
+        lineOut = "Backtracking,None," + problem + ", " + str(nodesExplored) + ", " + str(arcsRevised)
+        call("echo \"" + lineOut + "\" >> "+logFile,shell=True)
 
 
 
