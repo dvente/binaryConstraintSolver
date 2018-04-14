@@ -59,7 +59,7 @@ public class MACSolver {
         result.append("Arcs Revised: " + arcsRevised + "\n");
         result.append("Solution: \n");
         for (int i = 0; i < problem.getVars().size(); i++) {
-            result.append(problem.getVars().get(i).toString());
+            result.append(problem.getVars().get(i).toString() + "\n");
         }
         System.out.println(result);
     }
@@ -117,19 +117,17 @@ public class MACSolver {
 			BinaryArc arc = q.poll();
 			Set<Integer> deleted = revise(arc);
 			
-			
-//            consistent = !futureVar.getDomain().isEmpty();
-//            if (!pruned.keySet().contains(futureVar)) {
-//                pruned.put(futureVar, new HashSet<Integer>());
-//            }
-//            pruned.get(futureVar).addAll(deleted);
-//            if (!consistent) {
-//                pruningStack.push(pruned);
-//                return false;
-//            }
-//
-//        }
-//        
+
+            if (!pruned.containsKey(arc.getDestination())) {
+                pruned.put(arc.getDestination(), new HashSet<Integer>());
+            }
+            pruned.get(arc.getDestination()).addAll(deleted);
+            
+            if(arc.getDestination().getDomain().isEmpty()) {
+    				pruningStack.push(pruned);
+                  return false;
+    			
+            }
 			
 			if(!deleted.isEmpty()){
 				for(BinaryArc newArc: problem.getArcs().get(arc.getDestination()).values()) {
@@ -138,10 +136,7 @@ public class MACSolver {
 					}	
 				}
 			}
-			else {
-				pruningStack.push(pruned);
-              return false;
-			}
+
 		}
 		pruningStack.push(pruned);
       return true;

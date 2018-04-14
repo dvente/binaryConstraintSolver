@@ -28,8 +28,6 @@ for file in os.listdir(cspFolder):
         lineOut = "Backtracking,None," + problem + ", " + str(nodesExplored) + ", " + str(arcsRevised)
         call("echo \"" + lineOut + "\" >> "+logFile,shell=True)
 
-
-
         FCSDOutput = check_output("java -classpath " + binFolder + " -ea FCSolver " + cspFolder + file ,shell=True)
         branchSearch = branchPatern.search(FCSDOutput)
         nodesExplored = branchSearch.group(1)
@@ -45,6 +43,23 @@ for file in os.listdir(cspFolder):
             arcSearch = arcPatern.search(FCOutput)    
             arcsRevised = arcSearch.group(1)
             lineOut = "Forward Checking, " + h + ", " + problem + ", " + str(nodesExplored) + ", " + str(arcsRevised)
+            call("echo \"" + lineOut + "\" >> "+logFile,shell=True)
+
+        MACSDOutput = check_output("java -classpath " + binFolder + " -ea MACSolver " + cspFolder + file ,shell=True)
+        branchSearch = branchPatern.search(MACSDOutput)
+        nodesExplored = branchSearch.group(1)
+        arcSearch = arcPatern.search(MACSDOutput)    
+        arcsRevised = arcSearch.group(1)
+        lineOut = "Maintaining Arc Consistency, Smallest Domain, " + problem + ", " + str(nodesExplored) + ", " + str(arcsRevised)
+        call("echo \"" + lineOut + "\" >> "+logFile,shell=True)
+
+        for h in heuristics:
+            MACOutput = check_output("java -classpath " + binFolder + " -ea MACSolver " + cspFolder + file + " " + cspFolder+problem+h+".csph",shell=True)
+            branchSearch = branchPatern.search(MACOutput)
+            nodesExplored = branchSearch.group(1)
+            arcSearch = arcPatern.search(MACOutput)    
+            arcsRevised = arcSearch.group(1)
+            lineOut = "Maintaining Arc Consistency, " + h + ", " + problem + ", " + str(nodesExplored) + ", " + str(arcsRevised)
             call("echo \"" + lineOut + "\" >> "+logFile,shell=True)
 
 
