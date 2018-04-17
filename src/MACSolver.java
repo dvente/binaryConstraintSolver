@@ -1,4 +1,3 @@
-import java.util.Collection;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -57,6 +56,8 @@ public class MACSolver {
         StringBuffer result = new StringBuffer();
         result.append("Branches explored: " + branchesExplored + "\n");
         result.append("Arcs Revised: " + arcsRevised + "\n");
+        result.append("Number of Variables: " + problem.getNoVariables() + "\n");
+        result.append("Number of Constraints: " + Integer.toString(problem.getNoConstraints()) + "\n");
         result.append("Solution: \n");
         for (int i = 0; i < problem.getVars().size(); i++) {
             result.append(problem.getVars().get(i).toString() + "\n");
@@ -109,40 +110,40 @@ public class MACSolver {
 
         return var.getDomain().iterator().next();
     }
-    
+
     public boolean AC3() {
-    	Map<CSPVariable, Set<Integer>> pruned = new HashMap<CSPVariable, Set<Integer>>();
-		Queue<BinaryArc> q = problem.getArcQueue();
-		while(!q.isEmpty()) {
-			BinaryArc arc = q.poll();
-			Set<Integer> deleted = revise(arc);
-			
+
+        Map<CSPVariable, Set<Integer>> pruned = new HashMap<CSPVariable, Set<Integer>>();
+        Queue<BinaryArc> q = problem.getArcQueue();
+        while (!q.isEmpty()) {
+            BinaryArc arc = q.poll();
+            Set<Integer> deleted = revise(arc);
 
             if (!pruned.containsKey(arc.getDestination())) {
                 pruned.put(arc.getDestination(), new HashSet<Integer>());
             }
             pruned.get(arc.getDestination()).addAll(deleted);
-            
-            if(arc.getDestination().getDomain().isEmpty()) {
-    				pruningStack.push(pruned);
-                  return false;
-    			
-            }
-			
-			if(!deleted.isEmpty()){
-				for(BinaryArc newArc: problem.getArcs().get(arc.getDestination()).values()) {
-					if(!newArc.equals(arc.reverse())) {
-						q.offer(newArc);
-					}	
-				}
-			}
 
-		}
-		pruningStack.push(pruned);
-      return true;
-    			
+            if (arc.getDestination().getDomain().isEmpty()) {
+                pruningStack.push(pruned);
+                return false;
+
+            }
+
+            if (!deleted.isEmpty()) {
+                for (BinaryArc newArc : problem.getArcs().get(arc.getDestination()).values()) {
+                    if (!newArc.equals(arc.reverse())) {
+                        q.offer(newArc);
+                    }
+                }
+            }
+
+        }
+        pruningStack.push(pruned);
+        return true;
+
     }
-    
+
     public boolean MAC3() {
 
         if (problem.completeAssignment()) {
@@ -220,29 +221,29 @@ public class MACSolver {
         return toDelete;
     }
 
-//    private boolean reviseFutureArcs(CSPVariable currentVar) {
-//
-//        Map<CSPVariable, Set<Integer>> pruned = new HashMap<CSPVariable, Set<Integer>>();
-//        boolean consistent = true;
-//        Collection<BinaryConstraint> arcsToRevise = problem.getContraints(currentVar);
-//        for (BinaryConstraint constr : arcsToRevise) {
-//            CSPVariable futureVar = constr.getOtherVar(currentVar);
-//            Set<Integer> deleted = revise(constr, currentVar);
-//            consistent = !futureVar.getDomain().isEmpty();
-//            if (!pruned.keySet().contains(futureVar)) {
-//                pruned.put(futureVar, new HashSet<Integer>());
-//            }
-//            pruned.get(futureVar).addAll(deleted);
-//            if (!consistent) {
-//                pruningStack.push(pruned);
-//                return false;
-//            }
-//
-//        }
-//        pruningStack.push(pruned);
-//        return true;
-//
-//    }
+    //    private boolean reviseFutureArcs(CSPVariable currentVar) {
+    //
+    //        Map<CSPVariable, Set<Integer>> pruned = new HashMap<CSPVariable, Set<Integer>>();
+    //        boolean consistent = true;
+    //        Collection<BinaryConstraint> arcsToRevise = problem.getContraints(currentVar);
+    //        for (BinaryConstraint constr : arcsToRevise) {
+    //            CSPVariable futureVar = constr.getOtherVar(currentVar);
+    //            Set<Integer> deleted = revise(constr, currentVar);
+    //            consistent = !futureVar.getDomain().isEmpty();
+    //            if (!pruned.keySet().contains(futureVar)) {
+    //                pruned.put(futureVar, new HashSet<Integer>());
+    //            }
+    //            pruned.get(futureVar).addAll(deleted);
+    //            if (!consistent) {
+    //                pruningStack.push(pruned);
+    //                return false;
+    //            }
+    //
+    //        }
+    //        pruningStack.push(pruned);
+    //        return true;
+    //
+    //    }
 
     @Override
     public String toString() {

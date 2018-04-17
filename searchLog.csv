@@ -87,3 +87,20 @@ Maintaining Arc Consistency, Smallest Domain, langfords3_9, 29, 318
 Maintaining Arc Consistency, Name, langfords3_9, 365, 4771
 Maintaining Arc Consistency, Random, langfords3_9, 505, 9183
 Maintaining Arc Consistency, MaxDegree, langfords3_9, 413, 9183
+Backtracking,None, 10Queens, 975, 0, 10, 45
+Forward Checking, Smallest Domain, 10Queens, 292, 517, 10, 45
+Forward Checking, Random, 10Queens, 142, 179, 10, 45
+Forward Checking, MaxDegree, 10Queens, 142, 179, 10, 45
+Maintaining Arc Consistency, Smallest Domain, 10Queens, 54, 315, 10, 45
+Maintaining Arc Consistency, Name, 10Queens, 36, 176, 10, 45
+Maintaining Arc Consistency, Random, 10Queens, 30, 138, 10, 45
+Maintaining Arc Consistency, MaxDegree, 10Queens, 30, 138, 10, 45
+Backtracking,None, 10Queens, 975, 0, 10, 45
+Forward Checking, Smallest Domain, 10Queens, 292, 517, 10, 45
+Forward Checking, Name, 10Queens, 150, 215, 10, 45
+Forward Checking, Random, 10Queens, 90, 143, 10, 45
+Forward Checking, MaxDegree, 10Queens, 90, 143, 10, 45
+Maintaining Arc Consistency, Smallest Domain, 10Queens, 54, 315, 10, 45
+Maintaining Arc Consistency, Name, 10Queens, 36, 176, 10, 45
+Maintaining Arc Consistency, Random, 10Queens, 24, 120, 10, 45
+Maintaining Arc Consistency, MaxDegree, 10Queens, 24, 120, 10, 45

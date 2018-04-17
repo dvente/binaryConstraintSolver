@@ -56,6 +56,8 @@ public class FCSolver {
         StringBuffer result = new StringBuffer();
         result.append("Branches explored: " + branchesExplored + "\n");
         result.append("Arcs Revised: " + arcsRevised + "\n");
+        result.append("Number of Variables: " + problem.getNoVariables() + "\n");
+        result.append("Number of Constraints: " + Integer.toString(problem.getNoConstraints()) + "\n");
         result.append("Solution: \n");
         for (int i = 0; i < problem.getVars().size(); i++) {
             result.append(problem.getVars().get(i).toString() + "\n");
@@ -148,7 +150,7 @@ public class FCSolver {
 
         if (!var.getDomain().isEmpty()) {
             if (reviseFutureArcs(var)) {
-//            	assert problem.isConsistent();
+                //            	assert problem.isConsistent();
                 if (forwardChecking()) {
                     return true;
                 }
@@ -186,7 +188,7 @@ public class FCSolver {
         }
 
         return toDelete;
-    } 
+    }
 
     private boolean reviseFutureArcs(CSPVariable currentVar) {
 

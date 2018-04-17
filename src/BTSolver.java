@@ -16,9 +16,11 @@ public class BTSolver {
 
         StringBuffer result = new StringBuffer();
         result.append("Branches explored: " + nodesExplored + "\n");
+        result.append("Number of Variables: " + problem.getNoVariables() + "\n");
+        result.append("Number of Constraints: " + Integer.toString(problem.getNoConstraints()) + "\n");
         result.append("Solution: \n");
         for (int i = 0; i < problem.getVars().size(); i++) {
-            result.append(problem.getVars().get(i).toString());
+            result.append(problem.getVars().get(i).toString() + "\n");
         }
         System.out.println(result);
     }

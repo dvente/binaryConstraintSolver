@@ -37,7 +37,7 @@ public final class BinaryCSP {
     public int getNoVariables() {
 
         return varList.size();
-    } 
+    }
 
     public CSPVariable getVar(int i) {
 
@@ -96,20 +96,21 @@ public final class BinaryCSP {
     }
 
     public Map<CSPVariable, Map<CSPVariable, BinaryArc>> getArcs() {
-    	
+
         return arcs;
     }
 
     public Queue<BinaryArc> getArcQueue() {
-    	Queue<BinaryArc> q = new LinkedList<BinaryArc>();
-    	for(CSPVariable first: arcs.keySet()) {
-    		for(CSPVariable second: arcs.get(first).keySet()) {
-    			q.offer(arcs.get(first).get(second));
-    		}
-    	}
+
+        Queue<BinaryArc> q = new LinkedList<BinaryArc>();
+        for (CSPVariable first : arcs.keySet()) {
+            for (CSPVariable second : arcs.get(first).keySet()) {
+                q.offer(arcs.get(first).get(second));
+            }
+        }
         return q;
     }
-    
+
     public Collection<BinaryArc> getOutgoingArcs(CSPVariable currentVar) {
 
         List<BinaryArc> c = new ArrayList<BinaryArc>();
@@ -119,7 +120,7 @@ public final class BinaryCSP {
         }
         return c;
     }
-    
+
     public Collection<BinaryArc> getIncomingArcs(CSPVariable currentVar) {
 
         List<BinaryArc> c = new ArrayList<BinaryArc>();
@@ -130,6 +131,16 @@ public final class BinaryCSP {
             }
         }
         return c;
+    }
+
+    public int getNoConstraints() {
+
+        int counter = 0;
+        for (CSPVariable first : arcs.keySet()) {
+            counter += arcs.get(first).values().size();
+        }
+        //every constraint consists of 2 arcs
+        return counter / 2;
     }
 
 }
