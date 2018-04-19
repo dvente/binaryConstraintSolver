@@ -11,8 +11,8 @@ import java.util.Stack;
 public class FCSolver {
 
     BinaryCSP problem;
-    int branchesExplored;
-    int arcsRevised;
+    long branchesExplored;
+    long arcsRevised;
     Queue<CSPVariable> varQueue;
     Stack<Map<CSPVariable, Set<Integer>>> pruningStack;
 

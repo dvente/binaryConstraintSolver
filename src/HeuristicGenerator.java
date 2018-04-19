@@ -75,7 +75,7 @@ public class HeuristicGenerator {
             @Override
             public int compare(CSPVariable o1, CSPVariable o2) {
 
-                return problem.getIncomingArcs(o1).size() - problem.getIncomingArcs(o2).size();
+                return -1 * (problem.getIncomingArcs(o1).size() - problem.getIncomingArcs(o2).size());
             }
 
         });

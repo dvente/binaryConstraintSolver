@@ -5,6 +5,7 @@ public final class BinaryArc {
 
     private final CSPVariable origin, destination;
     private Set<BinaryTuple> tuples;
+    
 
     public BinaryArc(CSPVariable firstVar, CSPVariable secondVar, Set<BinaryTuple> t) {
 
@@ -27,9 +28,6 @@ public final class BinaryArc {
 
         StringBuffer result = new StringBuffer();
         result.append(origin.getName() + "->" + destination.getName());
-        //        for (BinaryTuple bt : tuples) {
-        //            result.append(bt + "\n");
-        //        }
         return result.toString();
     }
 

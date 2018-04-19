@@ -2,7 +2,7 @@
 public class BTSolver {
 
     BinaryCSP problem;
-    int nodesExplored;
+    long nodesExplored;
 
     public BTSolver(BinaryCSP problem) {
 

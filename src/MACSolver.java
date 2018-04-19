@@ -10,8 +10,8 @@ import java.util.Stack;
 public class MACSolver {
 
     BinaryCSP problem;
-    int branchesExplored;
-    int arcsRevised;
+    long branchesExplored;
+    long arcsRevised;
     //    List<CSPVariable> varList;
     Queue<CSPVariable> varQueue;
     Stack<Map<CSPVariable, Set<Integer>>> pruningStack;
