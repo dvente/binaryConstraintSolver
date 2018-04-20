@@ -40,7 +40,10 @@ public class HeuristicGenerator {
 
                 HeuristicGenerator generator = new HeuristicGenerator(location.getPath());
                 generator.generateRandomHeuristic();
+
+                generator = new HeuristicGenerator(location.getPath());
                 generator.generateMaxDegreeHeuristic();
+                generator = new HeuristicGenerator(location.getPath());
                 generator.generateNameHeuristic();
             }
         } else {

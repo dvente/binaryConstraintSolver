@@ -65,3 +65,21 @@ Maintaining Arc Consistency, MaxDegree, langfords2_4, 12, 53, 8, 28
 Backtracking,None, langfords3_10, 695175, 0, 30, 425
 Forward Checking, Smallest Domain, langfords3_10, 5346, 17431, 30, 425
 Forward Checking, Name, langfords3_10, 41918, 206529, 30, 425
+Forward Checking, Random, langfords3_10, 6585653730, 28265937780, 30, 425
+Forward Checking, MaxDegree, langfords3_10, 24494948, 31906349, 30, 425
+Maintaining Arc Consistency, Smallest Domain, langfords3_10, 106, 1659, 30, 425
+Maintaining Arc Consistency, Name, langfords3_10, 788, 11474, 30, 425
+Maintaining Arc Consistency, Random, langfords3_10, 826, 18688, 30, 425
+Maintaining Arc Consistency, MaxDegree, langfords3_10, 202, 3577, 30, 425
+Backtracking,None, langfords3_9, 142425, 0, 27, 342
+Forward Checking, Smallest Domain, langfords3_9, 97, 548, 27, 342
+Forward Checking, Name, langfords3_9, 15481, 69815, 27, 342
+Forward Checking, Random, langfords3_9, 57770387, 151190858, 27, 342
+Forward Checking, MaxDegree, langfords3_9, 1872589, 2535100, 27, 342
+Maintaining Arc Consistency, Smallest Domain, langfords3_9, 29, 318, 27, 342
+Maintaining Arc Consistency, Name, langfords3_9, 365, 4771, 27, 342
+Maintaining Arc Consistency, Random, langfords3_9, 955, 15337, 27, 342
+Maintaining Arc Consistency, MaxDegree, langfords3_9, 79, 1123, 27, 342
+Backtracking,None, zFinnishSudoku, 11320226975, 0, 81, 810
+Forward Checking, Smallest Domain, zFinnishSudoku, 115847, 240069, 81, 810
+Forward Checking, Name, zFinnishSudoku, 3027747, 7816364, 81, 810

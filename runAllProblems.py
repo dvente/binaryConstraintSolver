@@ -17,7 +17,7 @@ errorPatern  = re.compile("")
 heuristics = ["Name", "Random", "MaxDegree"]
 call("rm -f " + cspFolder + "/*.csph",shell=True)
 call("java -classpath " + binFolder + " HeuristicGenerator "+cspFolder,shell=True)
-#call("rm -f " + logFile + " && touch " + logFile + " && echo \"Algorithm,Heuristic,Problem,Nodes explored,Arcs Revised,number of vars,number of constraints\" >> "+logFile,shell=True)
+call("rm -f " + logFile + " && touch " + logFile + " && echo \"Algorithm,Heuristic,Problem,branches explored,Arcs Revised,number of vars,number of constraints\" >> "+logFile,shell=True)
 
 for file in sorted(os.listdir(cspFolder)):
     if(problemPatern.match(file)):
