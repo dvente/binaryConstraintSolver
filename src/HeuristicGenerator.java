@@ -1,3 +1,7 @@
+
+/*
+ * @author 170008773
+ */
 import java.io.File;
 import java.io.FileWriter;
 import java.io.FilenameFilter;
@@ -8,102 +12,156 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * The Class HeuristicGenerator.
+ */
 public class HeuristicGenerator {
 
-    String CSPlocation;
-    String fileName;
-    BinaryCSP problem;
+	/** The CSP location. */
+	String CSPlocation;
 
-    public HeuristicGenerator(String CSPLocation) {
+	/** The file name of the CSP problem. */
+	String fileName;
 
-        this.CSPlocation = CSPLocation;
-        BinaryCSPReader reader = new BinaryCSPReader();
-        problem = reader.readBinaryCSP(CSPLocation);
-        fileName = CSPlocation.substring(0, CSPlocation.lastIndexOf('.'));
-    }
+	/** The CSP. */
+	BinaryCSP problem;
 
-    public static void main(String[] args) throws IOException {
+	/**
+	 * Instantiates a new heuristic generator.
+	 *
+	 * @param CSPLocation
+	 *            the CSP location
+	 */
+	public HeuristicGenerator(String CSPLocation) {
 
-        String CSPLocation = args[0];
-        File input = new File(CSPLocation);
-        if (input.isDirectory()) {
-            File[] fileList = input.listFiles(new FilenameFilter() {
+		this.CSPlocation = CSPLocation;
+		BinaryCSPReader reader = new BinaryCSPReader();
+		problem = reader.readBinaryCSP(CSPLocation);
+		fileName = CSPlocation.substring(0, CSPlocation.lastIndexOf('.'));
+	}
 
-                @Override
-                public boolean accept(File dir, String name) {
+	/**
+	 * The main method.
+	 *
+	 * @param args
+	 *            the arguments
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred.
+	 */
+	public static void main(String[] args) throws IOException {
 
-                    return name.endsWith(".csp");
-                }
+		String CSPLocation = args[0];
+		File input = new File(CSPLocation);
+		if (input.isDirectory()) {
+			File[] fileList = input.listFiles(new FilenameFilter() {
 
-            });
-            for (File location : fileList) {
+				@Override
+				public boolean accept(File dir, String name) {
 
-                HeuristicGenerator generator = new HeuristicGenerator(location.getPath());
+					return name.endsWith(".csp");
+				}
 
-                generator = new HeuristicGenerator(location.getPath());
-                generator.generateMaxDegreeHeuristic();
-                generator = new HeuristicGenerator(location.getPath());
-                generator.generateNameHeuristic();
-            }
-        } else {
-            HeuristicGenerator generator = new HeuristicGenerator(CSPLocation);
-            generator.generateMaxDegreeHeuristic();
-            generator.generateNameHeuristic();
-        }
+			});
+			for (File location : fileList) {
 
-    }
+				HeuristicGenerator generator = new HeuristicGenerator(location.getPath());
 
-    public void writeHeuristicToFile(Map<String, Integer> h, String hName) throws IOException {
+				generator = new HeuristicGenerator(location.getPath());
+				generator.generateMaxDegreeHeuristic();
+				generator = new HeuristicGenerator(location.getPath());
+				generator.generateNameHeuristic();
+			}
+		} else {
+			HeuristicGenerator generator = new HeuristicGenerator(CSPLocation);
+			generator.generateMaxDegreeHeuristic();
+			generator.generateNameHeuristic();
+		}
 
-        File heuristicFile = new File(fileName + hName + ".csph");
-        try (FileWriter writer = new FileWriter(heuristicFile)) {
-            for (String name : h.keySet()) {
-                writer.write(name + "," + h.get(name) + "\n");
-            }
+	}
 
-        }
+	/**
+	 * Write heuristic to file.
+	 *
+	 * @param h
+	 *            the heuristic to be written to file
+	 * @param hName
+	 *            the name of the heuristic
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred.
+	 */
+	public void writeHeuristicToFile(Map<String, Integer> h, String hName) throws IOException {
 
-    }
+		File heuristicFile = new File(fileName + hName + ".csph");
+		try (FileWriter writer = new FileWriter(heuristicFile)) {
+			for (String name : h.keySet()) {
+				writer.write(name + "," + h.get(name) + "\n");
+			}
 
-    public void generateMaxDegreeHeuristic() throws IOException {
+		}
 
-        Map<String, Integer> h = new HashMap<String, Integer>();
-        int i = 0;
+	}
 
-        List<CSPVariable> varList = problem.getVars();
-        Collections.sort(varList, new Comparator<CSPVariable>() {
+	/**
+	 * Generate max degree heuristic.
+	 *
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred.
+	 */
+	public void generateMaxDegreeHeuristic() throws IOException {
 
-            @Override
-            public int compare(CSPVariable o1, CSPVariable o2) {
+		Map<String, Integer> h = new HashMap<String, Integer>();
+		int i = 0;
 
-                return problem.getIncomingArcs(o1).size() - problem.getIncomingArcs(o2).size();
-            }
+		List<CSPVariable> varList = problem.getVars();
 
-        });
-        for (CSPVariable var : varList) {
-            h.put(var.getName(), i++);
-        }
-        writeHeuristicToFile(h, "MaxDegree");
-    }
+		// sort the variable list according to the heuritic
+		Collections.sort(varList, new Comparator<CSPVariable>() {
 
-    public void generateNameHeuristic() throws IOException {
+			@Override
+			public int compare(CSPVariable o1, CSPVariable o2) {
+				// Doesn't matter whether we pick incoming or outgoing arcs
+				// since the number will be equal
+				return problem.getIncomingArcs(o1).size() - problem.getIncomingArcs(o2).size();
+			}
 
-        Map<String, Integer> h = new HashMap<String, Integer>();
-        int i = 0;
-        List<CSPVariable> varList = problem.getVars();
-        varList.sort(new Comparator<CSPVariable>() {
+		});
 
-            @Override
-            public int compare(CSPVariable o1, CSPVariable o2) {
+		// record the order
+		for (CSPVariable var : varList) {
+			h.put(var.getName(), i++);
+		}
 
-                return o1.getName().compareTo(o2.getName());
-            }
+		writeHeuristicToFile(h, "MaxDegree");
+	}
 
-        });
-        for (CSPVariable var : varList) {
-            h.put(var.getName(), i++);
-        }
-        writeHeuristicToFile(h, "Name");
-    }
+	/**
+	 * Generate lexographic heuristic.
+	 *
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred.
+	 */
+	public void generateNameHeuristic() throws IOException {
+
+		Map<String, Integer> h = new HashMap<String, Integer>();
+		int i = 0;
+		List<CSPVariable> varList = problem.getVars();
+		// sort the variable list according to the heuritic
+		varList.sort(new Comparator<CSPVariable>() {
+
+			@Override
+			public int compare(CSPVariable o1, CSPVariable o2) {
+
+				return o1.getName().compareTo(o2.getName());
+			}
+
+		});
+
+		// record the orders
+		for (CSPVariable var : varList) {
+			h.put(var.getName(), i++);
+		}
+
+		writeHeuristicToFile(h, "Name");
+	}
 
 }
