@@ -8,11 +8,12 @@
 \addbibresource{~/Tex/library.bib}
 
 \usepackage[margin=1in]{geometry}
-
+\usepackage{appendix}
 \usepackage{amsmath}
 \usepackage{graphicx}
 \usepackage{listings}
 \usepackage{enumerate}
+\usepackage{color}
 \newcommand{\code}[1]{\texttt{#1}}
 \newtheorem{defin}{Definition}
 \newtheorem{prop}{Proposition}
@@ -57,18 +58,36 @@ The only tangeble difference  between FC and MAC is the use of AC3. AC3 proved e
 Testing was done through a variaty of methods. Firstly, a solver using backtracking was also implemented to be able to generate the correct answers to small problems for comparison, and to get a baseline for performance for the emperical evaluation. Secondly the testing was mostly done with the use of \code{assert} statements to provide sanitiy checks where possible and make the program fail immediately upon violating one of these checks. This allowed easier diagnosis and ultimately faster debuging of the code, as well as confidence that the solutions produced were correct. Here \code{assert} statements were used not only to let the program fail as fast as possible but also to be able to easitly disable the checking after design was done, since the checks done are not always trivial and can incur performance penalties. 
 
 \subsection{Design limitations and advantages} 
-\paragraph{limitations}The design of the solver has a few flaws. Firstly, there is a lot of common code between the three solvers (one using backtracking, FC and MAC respectively). It would have been better to implement these using a basic abstract solver class and then providing mechanics to extend the common parts by way of inheretence and or interface implementation. This would have made the code more compact and easier to maintain. Secondly, not a lot of flexibility is offered to use different dynamic heuristics at the user level. The static heuristics can be altered by the user by manually edditing the files, but no such mechanic exits for the dynamic heuristics. It would have been nice to provide some mechanic to the user to be able to use different dynamic heuristics. 
+\paragraph{limitations}The design of the solver has a few flaws. Firstly, there is a lot of common code between the three solvers (one using backtracking, FC and MAC respectively). It would have been better to implement these using a basic abstract solver class and then providing mechanics to extend the common parts by way of inheretence and or interface implementation. This would have made the code more compact and easier to maintain. Secondly, not a lot of flexibility is offered to use different dynamic heuristics at the user level. The static heuristics can be altered by the user by manually edditing the files, but no such mechanic exits for the dynamic heuristics. It would have been nice to provide some mechanic to the user to be able to use different dynamic heuristics. The solvers also do little to no input checking, which is obviously less than ideal. Finally, the statistics that the solvers keep track of are hard coded. It might have been nice to let the user either define or pick from several statistics to keep track of during runs. All of these functionalities, whoever, were deemed to be outside the scope of this project. 
 
 
 \section{Emperical evaluation}
-
 \subsection{Experiment setup}
+To collect the data for analysis a Python script was used. The solvers keep track of the amount of arcs revised and branches explored during their runs. Note that the number of branches explored is nott the same as the number of assignements made since 2-way branching was used. The python scrip will run all the solvers on all of the found problems with all the heuristics, which it will generate using the \code{HeuristicGenerator} class. It will then captrue the output and write the statistics to a \code{.csv} file allowing for easier analysis. The script should be run as \code{`python runAllProblems.py`} and the code can be found in appendix \ref{collection}.
 
 \subsection{Results}
 
+\begin{figure}[!ht]
+	\centering
+	\includegraphics[width=0.9\textwidth]{meanBranchPerAlgo}
+	\caption{A bargraph of the mean number of branches explored of every problem by algorithm. (lower is better)}
+	\label{byAlgo}
+\end{figure}
+
+\begin{figure}[!ht]
+	\centering
+	\includegraphics[width=0.9\textwidth]{branchPerAlgoAndHeuristic}
+	\caption{A bargraph of the number of branches explored of every problem by algorithm and heuristic (lower is better)}
+	\label{byHeuristic}
+\end{figure}
+
 \subsubsection{Algorithms}
+A bargraph depicting the average number of branches explored by each algorithm per problem, averaged over the heuristics used, ccan be found in figre \ref{byAlgo}. Here it easy to see that there exits a clear hirarchy. MAC outperforms FC which in term outperforms Backtracking, in almost all of the problems except \code{langfords3\_9} and \code{langfords3\_10} which we will discuss in the next section. This was what we expected to see, since all of these algirhtms are extentinons of eachother. It is interesting to note that the more constraints there are, the more gains each algorithm has over the previous version. This is again not surprising, since that is what the extra work performed by each of the algorithms is for.
+
 
 \subsubsection{Heuristics}
+A more detailed look at the data can be found in figure \ref{byHeuristic}. Here the number of branches per algorithm and individual heuristic is visualised. Here we see that in all the cases the dynamic heuristic performed best. In most cases, using FC with a less-than-optimal heuristic was still preferable to using backtracking, except in the two largest langords problems. Here using the Max Degree variable ordering actually performs worse than backtracking. This is probably the case because of how the constraints are layed out in the langfords problems. It should be noted that the performance of the Max Degree heuristic depends largely on how homogenious the problem is. For example, the constraint graph of the N-Queens problem is essentially fully connected, so the Max Degree heursitic is essentially useless here (because of how the heuristic generator was implemented in this case it is equivalent to the lexographical ordering). Langfords problem on the other hand is quite different since the different variables have different degrees. {\color{red}One would suspect that the Max Degree would work better here, but this appears to not be the case }
+
 
 \subsection{Discussion}
 
@@ -76,9 +95,15 @@ Testing was done through a variaty of methods. Firstly, a solver using backtrack
 \section{Conclusion}
 \label{conclusion}
 
- 
- 
- 
+
 word count: 
 \printbibliography
-f\end{document}
+
+ \begin{appendices}
+ 	\section{Experimental collection script}
+ 	\label{collection}
+ 	\lstinputlisting{../runAllProblems.py}
+ \end{appendices}
+ 
+ 
+\end{document}
