@@ -1,165 +1,299 @@
+
+/*
+ * @author 170008773
+ */
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
+/**
+ * The Class CSPVariable.
+ */
 public class CSPVariable {
 
-    private final String name;
-    private Set<Integer> domain;
+	/** The name of the variable. */
+	private final String name;
 
-    @Override
-    public int hashCode() {
+	/** The domain of the variable. */
+	private Set<Integer> domain;
 
-        final int prime = 31;
-        int result = 1;
-        result = prime * result + ((name == null) ? 0 : name.hashCode());
-        return result;
-    }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see java.lang.Object#hashCode()
+	 */
+	@Override
+	public int hashCode() {
 
-    @Override
-    public boolean equals(Object obj) {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((name == null) ? 0 : name.hashCode());
+		return result;
+	}
 
-        if (this == obj) {
-            return true;
-        }
-        if (obj == null) {
-            return false;
-        }
-        if (getClass() != obj.getClass()) {
-            return false;
-        }
-        CSPVariable other = (CSPVariable) obj;
-        if (name == null) {
-            if (other.name != null) {
-                return false;
-            }
-        } else if (!name.equals(other.name)) {
-            return false;
-        }
-        return true;
-    }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see java.lang.Object#equals(java.lang.Object)
+	 */
+	@Override
+	public boolean equals(Object obj) {
 
-    private boolean assigned;
-    private int value;
-    private final int order;
+		if (this == obj) {
+			return true;
+		}
+		if (obj == null) {
+			return false;
+		}
+		if (getClass() != obj.getClass()) {
+			return false;
+		}
+		CSPVariable other = (CSPVariable) obj;
+		if (name == null) {
+			if (other.name != null) {
+				return false;
+			}
+		} else if (!name.equals(other.name)) {
+			return false;
+		}
+		return true;
+	}
 
-    public CSPVariable(String name, int lowerBound, int upperBound) {
+	/** Is the variable assigned? */
+	private boolean assigned;
 
-        domain = new HashSet<Integer>();
-        this.order = -1;
-        this.name = name;
-        for (int i = lowerBound; i <= upperBound; i++) {
-            domain.add(i);
-        }
-        setAssigned(false);
-    }
+	/** The value. Can only be accessed if the variable is assigned */
+	private int value;
 
-    public CSPVariable(String name, Collection<Integer> domain) {
+	/** The order in the static heuristic being used. */
+	private final int order;
 
-        this.name = name;
-        this.order = -1;
-        this.domain.addAll(domain);
-        setAssigned(false);
-    }
+	/**
+	 * Instantiates a new CSP variable, with all integers between the bounds in it's
+	 * domain.
+	 *
+	 * @param name
+	 *            the name of the variable
+	 * @param lowerBound
+	 *            the lower bound of the domain
+	 * @param upperBound
+	 *            the upper bound of the domain
+	 */
+	public CSPVariable(String name, int lowerBound, int upperBound) {
 
-    public CSPVariable(String name, int order, int lowerBound, int upperBound) {
+		domain = new HashSet<Integer>();
+		this.order = -1;
+		this.name = name;
+		for (int i = lowerBound; i <= upperBound; i++) {
+			domain.add(i);
+		}
+		setAssigned(false);
+	}
 
-        domain = new HashSet<Integer>();
-        this.order = order;
-        this.name = name;
-        for (int i = lowerBound; i <= upperBound; i++) {
-            domain.add(i);
-        }
-        setAssigned(false);
-    }
+	/**
+	 * Instantiates a new CSP variable.
+	 *
+	 * @param name
+	 *            the name
+	 * @param domain
+	 *            the domain
+	 */
+	public CSPVariable(String name, Collection<Integer> domain) {
 
-    public CSPVariable(String name, int order, Collection<Integer> domain) {
+		this.name = name;
+		this.order = -1;
+		this.domain.addAll(domain);
+		setAssigned(false);
+	}
 
-        this.name = name;
-        this.order = order;
-        this.domain.addAll(domain);
-        setAssigned(false);
-    }
+	/**
+	 * Instantiates a new CSP variable, with all integers between the bounds in it's
+	 * domain.
+	 *
+	 * @param name
+	 *            the name of the variable
+	 * @param order
+	 *            the order in the static heuristic
+	 * @param lowerBound
+	 *            the lower bound of the domain
+	 * @param upperBound
+	 *            the upper bound of the domain
+	 */
+	public CSPVariable(String name, int order, int lowerBound, int upperBound) {
 
-    public String getName() {
+		domain = new HashSet<Integer>();
+		this.order = order;
+		this.name = name;
+		for (int i = lowerBound; i <= upperBound; i++) {
+			domain.add(i);
+		}
+		setAssigned(false);
+	}
 
-        return name;
-    }
+	/**
+	 * Instantiates a new CSP variable.
+	 *
+	 * @param name
+	 *            the name of the variable
+	 * @param domain
+	 *            the domain of the variable
+	 */
+	public CSPVariable(String name, int order, Collection<Integer> domain) {
 
-    public boolean isAssigned() {
+		this.name = name;
+		this.order = order;
+		this.domain.addAll(domain);
+		setAssigned(false);
+	}
 
-        return assigned;
-    }
+	/**
+	 * Gets the name of the variable.
+	 *
+	 * @return the name of the variable
+	 */
+	public String getName() {
 
-    public void assign(int value) {
+		return name;
+	}
 
-        assert !assigned;
-        assert domain.contains(value);
-        this.value = value;
-        assigned = true;
-    }
+	/**
+	 * Checks if the variable is assigned.
+	 *
+	 * @return true, if is assigned
+	 */
+	public boolean isAssigned() {
 
-    public void unassign() {
+		return assigned;
+	}
 
-        assigned = false;
-    }
+	/**
+	 * Assign the varable the given value.
+	 *
+	 * @param value
+	 *            the value to assign the variable
+	 */
+	public void assign(int value) {
 
-    public void addToDomain(int value) {
+		assert !assigned;
+		assert domain.contains(value);
+		this.value = value;
+		assigned = true;
+	}
 
-        domain.add(value);
-    }
+	/**
+	 * Unassign the variable.
+	 */
+	public void unassign() {
 
-    public void removeFromDomain(Set<Integer> toDelete) {
+		assigned = false;
+	}
 
-        domain.removeAll(toDelete);
+	/**
+	 * Adds the value to the domain.
+	 *
+	 * @param value
+	 *            the value to be added to the domain
+	 */
+	public void addToDomain(int value) {
 
-    }
+		domain.add(value);
+	}
 
-    public Set<Integer> getDomain() {
+	/**
+	 * Removes a set of values from the domain.
+	 *
+	 * @param toDelete
+	 *            the set of to delete values
+	 */
+	public void removeFromDomain(Set<Integer> toDelete) {
 
-        return domain;
-    }
+		domain.removeAll(toDelete);
 
-    @Override
-    public String toString() {
+	}
 
-        if (isAssigned()) {
-            return "Var " + name + ": " + Integer.toString(getValue());
-        } else {
-            String ans = "Var " + name + ": ";
-            for (int val : domain) {
-                ans += Integer.toString(val) + ", ";
-            }
-            return ans;
-        }
+	/**
+	 * Gets the domain of the variable.
+	 *
+	 * @return the domain the variable
+	 */
+	public Set<Integer> getDomain() {
 
-    }
+		return domain;
+	}
 
-    public int getValue() {
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString() {
 
-        assert isAssigned();
-        return value;
-    }
+		if (isAssigned()) {
+			return "Var " + name + ": " + Integer.toString(getValue());
+		} else {
+			String ans = "Var " + name + ": ";
+			for (int val : domain) {
+				ans += Integer.toString(val) + ", ";
+			}
+			return ans;
+		}
 
-    public void setValue(int value) {
+	}
 
-        this.value = value;
-    }
+	/**
+	 * Gets the value of the variable.
+	 *
+	 * @return the value of the variable
+	 */
+	public int getValue() {
 
-    public void setAssigned(boolean assigned) {
+		assert isAssigned();
+		return value;
+	}
 
-        this.assigned = assigned;
-    }
+	/**
+	 * Sets the value the variable.
+	 *
+	 * @param value
+	 *            the new value the variable
+	 */
+	public void setValue(int value) {
 
-    public void removeFromDomain(int val) {
+		this.value = value;
+	}
 
-        domain.remove(val);
+	/**
+	 * Sets the assigned.
+	 *
+	 * @param assigned
+	 *            the new assigned
+	 */
+	public void setAssigned(boolean assigned) {
 
-    }
+		this.assigned = assigned;
+	}
 
-    public int getOrder() {
+	/**
+	 * Removes a value from the domain.
+	 *
+	 * @param val
+	 *            the value to remove
+	 */
+	public void removeFromDomain(int val) {
 
-        return order;
-    }
+		domain.remove(val);
+
+	}
+
+	/**
+	 * Gets the order of the variable.
+	 *
+	 * @return the order of the variable
+	 */
+	public int getOrder() {
+
+		return order;
+	}
 
 }

@@ -1,94 +1,151 @@
-
+/*
+ * @author 170008773
+ * The Class BTSolver.
+ */
 public class BTSolver {
 
-    BinaryCSP problem;
-    long nodesExplored;
+	/** The problem to solve. */
+	BinaryCSP problem;
 
-    public BTSolver(BinaryCSP problem) {
+	/** The nodes number of explored. */
+	long nodesExplored;
 
-        super();
-        this.problem = problem;
-    }
+	/**
+	 * Instantiates a new Backtrack solver.
+	 *
+	 * @param problem
+	 *            the problem
+	 */
+	public BTSolver(BinaryCSP problem) {
 
-    public void printSolution() {
+		super();
+		this.problem = problem;
+	}
 
-        assert problem.isConsistent();
+	/**
+	 * Prints the solution.
+	 */
+	public void printSolution() {
 
-        StringBuffer result = new StringBuffer();
-        result.append("Branches explored: " + nodesExplored + "\n");
-        result.append("Number of Variables: " + problem.getNoVariables() + "\n");
-        result.append("Number of Constraints: " + Integer.toString(problem.getNoConstraints()) + "\n");
-        result.append("Solution: \n");
-        for (int i = 0; i < problem.getVars().size(); i++) {
-            result.append(problem.getVars().get(i).toString() + "\n");
-        }
-        System.out.println(result);
-    }
+		assert problem.isConsistent();
 
-    @Override
-    public String toString() {
+		StringBuffer result = new StringBuffer();
+		result.append("Branches explored: " + nodesExplored + "\n");
+		result.append("Number of Variables: " + problem.getNoVariables() + "\n");
+		result.append("Number of Constraints: " + Integer.toString(problem.getNoConstraints()) + "\n");
+		result.append("Solution: \n");
+		for (int i = 0; i < problem.getVars().size(); i++) {
+			result.append(problem.getVars().get(i).toString() + "\n");
+		}
+		System.out.println(result);
+	}
 
-        return "BTSolver \n" + problem.toString();
-    }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString() {
 
-    public void assign(CSPVariable var, int value) {
+		return "BTSolver \n" + problem.toString();
+	}
 
-        var.assign(value);
-        nodesExplored++;
-    }
+	/**
+	 * Assign a value to a variable.
+	 *
+	 * @param var
+	 *            the variable to be assigned
+	 * @param value
+	 *            the value to assing the variable
+	 */
+	public void assign(CSPVariable var, int value) {
 
-    public void unassign(CSPVariable var) {
+		var.assign(value);
+		nodesExplored++;
+	}
 
-        var.unassign();
-    }
+	/**
+	 * Unassign a variable.
+	 *
+	 * @param var
+	 *            the variable to be unassigned
+	 */
+	public void unassign(CSPVariable var) {
 
-    public static void main(String[] args) {
+		var.unassign();
+	}
 
-        String CSPLocation = args[0];
-        BinaryCSPReader reader = new BinaryCSPReader();
-        System.out.println(CSPLocation);
-        BTSolver solver = new BTSolver(reader.readBinaryCSP(CSPLocation));
-        solver.solveCurrentProblem();
-    }
+	/**
+	 * The main method.
+	 *
+	 * @param args
+	 *            the arguments
+	 */
+	public static void main(String[] args) {
 
-    public void solveCurrentProblem() {
+		String CSPLocation = args[0];
+		BinaryCSPReader reader = new BinaryCSPReader();
+		System.out.println(CSPLocation);
+		BTSolver solver = new BTSolver(reader.readBinaryCSP(CSPLocation));
+		solver.solveCurrentProblem();
+	}
 
-        if (!backtrack(0)) {
-            System.out.println("No solution possible");
-        } else {
-            printSolution();
-        }
-    }
+	/**
+	 * Solve current problem.
+	 */
+	public void solveCurrentProblem() {
 
-    // adapted from lecture slides. simple backtracking
-    public boolean backtrack(int depth) {
+		if (!backtrack(0)) {
+			System.out.println("No solution possible");
+		} else {
+			printSolution();
+		}
+	}
 
-        CSPVariable var = problem.getVar(depth);
-        for (int value : var.getDomain()) {
-            assign(var, value);
-            boolean consistent = true;
-            for (int i = 0; i < depth; i++) {
-                consistent = problem.isArcConsistent(problem.getVar(i), var);
-                if (!consistent) {
-                    break;
-                }
-            }
-            if (consistent) {
-                if (depth == problem.getNoVariables() - 1) {
-                    return true;
-                } else {
-                    if (!backtrack(depth + 1)) {
-                        unassign(var);
-                    } else {
-                        return true;
-                    }
-                }
-            } else {
-                unassign(var);
-                continue;
-            }
-        }
-        return false;
-    }
+	/**
+	 * Recursive backtracking, adapted from lecture slides.
+	 *
+	 * @param depth
+	 *            the depth of the recursion
+	 * @return true, if a solution was found
+	 */
+	public boolean backtrack(int depth) {
+
+		// get variable
+		CSPVariable var = problem.getVar(depth);
+
+		// try all values in the domain
+		for (int value : var.getDomain()) {
+			assign(var, value);
+			boolean consistent = true;
+
+			// check if all constraints are still happy
+			for (int i = 0; i < depth; i++) {
+				consistent = problem.isArcConsistent(problem.getVar(i), var);
+				if (!consistent) {
+					break;
+				}
+			}
+			if (consistent) {
+				// are we done?
+				if (depth == problem.getNoVariables() - 1) {
+					return true;
+				} else {
+					// recurse
+					if (!backtrack(depth + 1)) {
+						unassign(var);
+					} else {
+						return true;
+					}
+				}
+			} else {
+				// backtrack, we tried everything
+				unassign(var);
+				continue;
+			}
+		}
+		return false;
+	}
 
 }
