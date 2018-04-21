@@ -12,7 +12,6 @@ public class MACSolver {
     BinaryCSP problem;
     long branchesExplored;
     long arcsRevised;
-    //    List<CSPVariable> varList;
     Queue<CSPVariable> varQueue;
     Stack<Map<CSPVariable, Set<Integer>>> pruningStack;
 

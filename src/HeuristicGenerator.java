@@ -39,7 +39,6 @@ public class HeuristicGenerator {
             for (File location : fileList) {
 
                 HeuristicGenerator generator = new HeuristicGenerator(location.getPath());
-                generator.generateRandomHeuristic();
 
                 generator = new HeuristicGenerator(location.getPath());
                 generator.generateMaxDegreeHeuristic();
@@ -48,7 +47,6 @@ public class HeuristicGenerator {
             }
         } else {
             HeuristicGenerator generator = new HeuristicGenerator(CSPLocation);
-            generator.generateRandomHeuristic();
             generator.generateMaxDegreeHeuristic();
             generator.generateNameHeuristic();
         }
@@ -78,7 +76,7 @@ public class HeuristicGenerator {
             @Override
             public int compare(CSPVariable o1, CSPVariable o2) {
 
-                return -1 * (problem.getIncomingArcs(o1).size() - problem.getIncomingArcs(o2).size());
+                return problem.getIncomingArcs(o1).size() - problem.getIncomingArcs(o2).size();
             }
 
         });
@@ -86,18 +84,6 @@ public class HeuristicGenerator {
             h.put(var.getName(), i++);
         }
         writeHeuristicToFile(h, "MaxDegree");
-    }
-
-    public void generateRandomHeuristic() throws IOException {
-
-        Map<String, Integer> h = new HashMap<String, Integer>();
-        int i = 0;
-        List<CSPVariable> varList = problem.getVars();
-        Collections.shuffle(varList);
-        for (CSPVariable var : varList) {
-            h.put(var.getName(), i++);
-        }
-        writeHeuristicToFile(h, "Random");
     }
 
     public void generateNameHeuristic() throws IOException {

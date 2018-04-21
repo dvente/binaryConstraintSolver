@@ -139,6 +139,7 @@ public final class BinaryCSP {
         for (CSPVariable first : arcs.keySet()) {
             counter += arcs.get(first).values().size();
         }
+
         //every constraint consists of 2 arcs
         return counter / 2;
     }

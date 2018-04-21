@@ -1,91 +1,71 @@
-Algorithm,Heuristic,Problem,Branches explored,Arcs Revised,number of vars,number of constraints
-Backtracking,None, 10Queens, 975, 0, 10, 45
-Forward Checking, Smallest Domain, 10Queens, 292, 517, 10, 45
-Forward Checking, Name, 10Queens, 150, 215, 10, 45
-Forward Checking, Random, 10Queens, 84, 120, 10, 45
-Forward Checking, MaxDegree, 10Queens, 150, 215, 10, 45
-Maintaining Arc Consistency, Smallest Domain, 10Queens, 54, 315, 10, 45
-Maintaining Arc Consistency, Name, 10Queens, 36, 176, 10, 45
-Maintaining Arc Consistency, Random, 10Queens, 20, 78, 10, 45
-Maintaining Arc Consistency, MaxDegree, 10Queens, 36, 176, 10, 45
-Backtracking,None, 4Queens, 26, 0, 4, 6
-Forward Checking, Smallest Domain, 4Queens, 10, 14, 4, 6
-Forward Checking, Name, 4Queens, 12, 14, 4, 6
-Forward Checking, Random, 4Queens, 4, 4, 4, 6
-Forward Checking, MaxDegree, 4Queens, 12, 14, 4, 6
-Maintaining Arc Consistency, Smallest Domain, 4Queens, 6, 13, 4, 6
-Maintaining Arc Consistency, Name, 4Queens, 6, 13, 4, 6
-Maintaining Arc Consistency, Random, 4Queens, 4, 6, 4, 6
-Maintaining Arc Consistency, MaxDegree, 4Queens, 6, 13, 4, 6
-Backtracking,None, 6Queens, 171, 0, 6, 15
-Forward Checking, Smallest Domain, 6Queens, 56, 89, 6, 15
-Forward Checking, Name, 6Queens, 46, 64, 6, 15
-Forward Checking, Random, 6Queens, 68, 92, 6, 15
-Forward Checking, MaxDegree, 6Queens, 46, 64, 6, 15
-Maintaining Arc Consistency, Smallest Domain, 6Queens, 22, 98, 6, 15
-Maintaining Arc Consistency, Name, 6Queens, 12, 51, 6, 15
-Maintaining Arc Consistency, Random, 6Queens, 20, 76, 6, 15
-Maintaining Arc Consistency, MaxDegree, 6Queens, 12, 51, 6, 15
-Backtracking,None, 8Queens, 876, 0, 8, 28
-Forward Checking, Smallest Domain, 8Queens, 66, 111, 8, 28
-Forward Checking, Name, 8Queens, 152, 214, 8, 28
-Forward Checking, Random, 8Queens, 180, 240, 8, 28
-Forward Checking, MaxDegree, 8Queens, 152, 214, 8, 28
-Maintaining Arc Consistency, Smallest Domain, 8Queens, 30, 151, 8, 28
-Maintaining Arc Consistency, Name, 8Queens, 28, 149, 8, 28
-Maintaining Arc Consistency, Random, 8Queens, 28, 152, 8, 28
-Maintaining Arc Consistency, MaxDegree, 8Queens, 28, 149, 8, 28
-Backtracking,None, SimonisSudoku, 313746, 0, 81, 810
-Forward Checking, Smallest Domain, SimonisSudoku, 121, 405, 81, 810
-Forward Checking, Name, SimonisSudoku, 357, 863, 81, 810
-Forward Checking, Random, SimonisSudoku, 60563, 99335, 81, 810
-Forward Checking, MaxDegree, SimonisSudoku, 295, 748, 81, 810
-Maintaining Arc Consistency, Smallest Domain, SimonisSudoku, 81, 376, 81, 810
-Maintaining Arc Consistency, Name, SimonisSudoku, 83, 561, 81, 810
-Maintaining Arc Consistency, Random, SimonisSudoku, 83, 543, 81, 810
-Maintaining Arc Consistency, MaxDegree, SimonisSudoku, 83, 561, 81, 810
-Backtracking,None, langfords2_3, 81, 0, 6, 15
-Forward Checking, Smallest Domain, langfords2_3, 22, 36, 6, 15
-Forward Checking, Name, langfords2_3, 18, 34, 6, 15
-Forward Checking, Random, langfords2_3, 22, 23, 6, 15
-Forward Checking, MaxDegree, langfords2_3, 18, 34, 6, 15
-Maintaining Arc Consistency, Smallest Domain, langfords2_3, 8, 22, 6, 15
-Maintaining Arc Consistency, Name, langfords2_3, 8, 22, 6, 15
-Maintaining Arc Consistency, Random, langfords2_3, 8, 18, 6, 15
-Maintaining Arc Consistency, MaxDegree, langfords2_3, 8, 22, 6, 15
-Backtracking,None, langfords2_4, 380, 0, 8, 28
-Forward Checking, Smallest Domain, langfords2_4, 30, 75, 8, 28
-Forward Checking, Name, langfords2_4, 56, 115, 8, 28
-Forward Checking, Random, langfords2_4, 48, 76, 8, 28
-Forward Checking, MaxDegree, langfords2_4, 56, 115, 8, 28
-Maintaining Arc Consistency, Smallest Domain, langfords2_4, 10, 47, 8, 28
-Maintaining Arc Consistency, Name, langfords2_4, 12, 53, 8, 28
-Maintaining Arc Consistency, Random, langfords2_4, 10, 34, 8, 28
-Maintaining Arc Consistency, MaxDegree, langfords2_4, 12, 53, 8, 28
-Backtracking,None, langfords3_10, 695175, 0, 30, 425
-Forward Checking, Smallest Domain, langfords3_10, 5346, 17431, 30, 425
-Forward Checking, Name, langfords3_10, 41918, 206529, 30, 425
-Forward Checking, Random, langfords3_10, 6585653730, 28265937780, 30, 425
-Forward Checking, MaxDegree, langfords3_10, 24494948, 31906349, 30, 425
-Maintaining Arc Consistency, Smallest Domain, langfords3_10, 106, 1659, 30, 425
-Maintaining Arc Consistency, Name, langfords3_10, 788, 11474, 30, 425
-Maintaining Arc Consistency, Random, langfords3_10, 826, 18688, 30, 425
-Maintaining Arc Consistency, MaxDegree, langfords3_10, 202, 3577, 30, 425
-Backtracking,None, langfords3_9, 142425, 0, 27, 342
-Forward Checking, Smallest Domain, langfords3_9, 97, 548, 27, 342
-Forward Checking, Name, langfords3_9, 15481, 69815, 27, 342
-Forward Checking, Random, langfords3_9, 57770387, 151190858, 27, 342
-Forward Checking, MaxDegree, langfords3_9, 1872589, 2535100, 27, 342
-Maintaining Arc Consistency, Smallest Domain, langfords3_9, 29, 318, 27, 342
-Maintaining Arc Consistency, Name, langfords3_9, 365, 4771, 27, 342
-Maintaining Arc Consistency, Random, langfords3_9, 955, 15337, 27, 342
-Maintaining Arc Consistency, MaxDegree, langfords3_9, 79, 1123, 27, 342
-Backtracking,None, zFinnishSudoku, 11320226975, 0, 81, 810
-Forward Checking, Smallest Domain, zFinnishSudoku, 115847, 240069, 81, 810
-Forward Checking, Name, zFinnishSudoku, 3027747, 7816364, 81, 810
-Forward Checking, Smallest Domain, zFinnishSudoku, 115847, 240069, 81, 810
-Forward Checking, Name, zFinnishSudoku, 3027747, 7816364, 81, 810
-Forward Checking, MaxDegree, zFinnishSudoku, 218711, 537743, 81, 810
-Maintaining Arc Consistency, Smallest Domain, zFinnishSudoku, 4211, 55013, 81, 810
-Maintaining Arc Consistency, Name, zFinnishSudoku, 9805, 89290, 81, 810
-Maintaining Arc Consistency, MaxDegree, zFinnishSudoku, 1313, 7692, 81, 810
+algorithm,heuristic,problem,branches explored,arcs revised,number of vars,number of constraints
+Backtracking,None,10Queens,975,0,10,45
+Forward Checking,Smallest Domain,10Queens,292,517,10,45
+Forward Checking,Name,10Queens,150,215,10,45
+Forward Checking,MaxDegree,10Queens,150,215,10,45
+Maintaining Arc Consistency,Smallest Domain,10Queens,54,315,10,45
+Maintaining Arc Consistency,Name,10Queens,36,176,10,45
+Maintaining Arc Consistency,MaxDegree,10Queens,36,176,10,45
+Backtracking,None,4Queens,26,0,4,6
+Forward Checking,Smallest Domain,4Queens,10,14,4,6
+Forward Checking,Name,4Queens,12,14,4,6
+Forward Checking,MaxDegree,4Queens,12,14,4,6
+Maintaining Arc Consistency,Smallest Domain,4Queens,6,13,4,6
+Maintaining Arc Consistency,Name,4Queens,6,13,4,6
+Maintaining Arc Consistency,MaxDegree,4Queens,6,13,4,6
+Backtracking,None,6Queens,171,0,6,15
+Forward Checking,Smallest Domain,6Queens,56,89,6,15
+Forward Checking,Name,6Queens,46,64,6,15
+Forward Checking,MaxDegree,6Queens,46,64,6,15
+Maintaining Arc Consistency,Smallest Domain,6Queens,22,98,6,15
+Maintaining Arc Consistency,Name,6Queens,12,51,6,15
+Maintaining Arc Consistency,MaxDegree,6Queens,12,51,6,15
+Backtracking,None,8Queens,876,0,8,28
+Forward Checking,Smallest Domain,8Queens,66,111,8,28
+Forward Checking,Name,8Queens,152,214,8,28
+Forward Checking,MaxDegree,8Queens,152,214,8,28
+Maintaining Arc Consistency,Smallest Domain,8Queens,30,151,8,28
+Maintaining Arc Consistency,Name,8Queens,28,149,8,28
+Maintaining Arc Consistency,MaxDegree,8Queens,28,149,8,28
+Backtracking,None,SimonisSudoku,313746,0,81,810
+Forward Checking,Smallest Domain,SimonisSudoku,121,405,81,810
+Forward Checking,Name,SimonisSudoku,357,863,81,810
+Forward Checking,MaxDegree,SimonisSudoku,295,748,81,810
+Maintaining Arc Consistency,Smallest Domain,SimonisSudoku,81,376,81,810
+Maintaining Arc Consistency,Name,SimonisSudoku,83,561,81,810
+Maintaining Arc Consistency,MaxDegree,SimonisSudoku,83,561,81,810
+Backtracking,None,langfords2_3,81,0,6,15
+Forward Checking,Smallest Domain,langfords2_3,22,36,6,15
+Forward Checking,Name,langfords2_3,18,34,6,15
+Forward Checking,MaxDegree,langfords2_3,18,34,6,15
+Maintaining Arc Consistency,Smallest Domain,langfords2_3,8,22,6,15
+Maintaining Arc Consistency,Name,langfords2_3,8,22,6,15
+Maintaining Arc Consistency,MaxDegree,langfords2_3,8,22,6,15
+Backtracking,None,langfords2_4,380,0,8,28
+Forward Checking,Smallest Domain,langfords2_4,30,75,8,28
+Forward Checking,Name,langfords2_4,56,115,8,28
+Forward Checking,MaxDegree,langfords2_4,56,115,8,28
+Maintaining Arc Consistency,Smallest Domain,langfords2_4,10,47,8,28
+Maintaining Arc Consistency,Name,langfords2_4,12,53,8,28
+Maintaining Arc Consistency,MaxDegree,langfords2_4,12,53,8,28
+Backtracking,None,langfords3_10,695175,0,30,425
+Forward Checking,Smallest Domain,langfords3_10,5346,17431,30,425
+Forward Checking,Name,langfords3_10,41918,206529,30,425
+Forward Checking,MaxDegree,langfords3_10,328304,454400,30,425
+Maintaining Arc Consistency,Smallest Domain,langfords3_10,106,1659,30,425
+Maintaining Arc Consistency,Name,langfords3_10,788,11474,30,425
+Maintaining Arc Consistency,MaxDegree,langfords3_10,238,3378,30,425
+Backtracking,None,langfords3_9,142425,0,27,342
+Forward Checking,Smallest Domain,langfords3_9,97,548,27,342
+Forward Checking,Name,langfords3_9,15481,69815,27,342
+Forward Checking,MaxDegree,langfords3_9,51013,81853,27,342
+Maintaining Arc Consistency,Smallest Domain,langfords3_9,29,318,27,342
+Maintaining Arc Consistency,Name,langfords3_9,365,4771,27,342
+Maintaining Arc Consistency,MaxDegree,langfords3_9,85,1085,27,342
+Backtracking,None,FinnishSudoku,11320226975,0,81,810
+Forward Checking,Smallest Domain,FinnishSudoku,115847,240069,81,810
+Forward Checking,Name,FinnishSudoku,3027747,7816364,81,810
+Forward Checking,MaxDegree,FinnishSudoku,218711,537743,81,810
+Maintaining Arc Consistency,Smallest Domain,FinnishSudoku,4211,55013,81,810
+Maintaining Arc Consistency,Name,FinnishSudoku,9805,89290,81,810
+Maintaining Arc Consistency,MaxDegree,FinnishSudoku,1313,7692,81,810

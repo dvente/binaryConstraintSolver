@@ -6,36 +6,40 @@ public class CSPVariable {
 
     private final String name;
     private Set<Integer> domain;
-    
- 
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((name == null) ? 0 : name.hashCode());
-		return result;
-	}
 
+    @Override
+    public int hashCode() {
 
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + ((name == null) ? 0 : name.hashCode());
+        return result;
+    }
 
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		CSPVariable other = (CSPVariable) obj;
-		if (name == null) {
-			if (other.name != null)
-				return false;
-		} else if (!name.equals(other.name))
-			return false;
-		return true;
-	}
+    @Override
+    public boolean equals(Object obj) {
 
-	private boolean assigned;
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        CSPVariable other = (CSPVariable) obj;
+        if (name == null) {
+            if (other.name != null) {
+                return false;
+            }
+        } else if (!name.equals(other.name)) {
+            return false;
+        }
+        return true;
+    }
+
+    private boolean assigned;
     private int value;
     private final int order;
 
@@ -50,9 +54,7 @@ public class CSPVariable {
         setAssigned(false);
     }
 
-
-
-	public CSPVariable(String name, Collection<Integer> domain) {
+    public CSPVariable(String name, Collection<Integer> domain) {
 
         this.name = name;
         this.order = -1;
