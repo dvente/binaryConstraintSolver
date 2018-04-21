@@ -29,25 +29,38 @@
 \maketitle
 
 \section{Introduction}
+For this assignement a basic binary constraint solver was to be implemented using Forward Checking (FC) and 2-way branching. The solver was also required to be able to use both dynamic and static heuristics.  Eventually the solver was extended to utilise Maininting Arc Consistency (MAC). An emperical comparison between the algorithms and several heuristics was also made. MAC with a dynamic, smallest domain heuristics performed best overall. 
+
 
 \section{Desing and implementation}
-
-
 \subsection{Variables and domains}
+\paragraph{Variables}To make some of the necessary bookkeeping easier, such as keeping track of the domains, a \code{CSPVariable} class was implemented. This class keeps track of things such as the domain, whether the variable is assigned, the name of the variable and eventually what order it has in a possible static heuristic. The name of the variable also enables naming variables instead of merely asigning them a numeric id, which is favorable when moddeling more complex problems. 
 
-\subsection{Constraints vs. Arcs}
+\paragraph{Domains} The domains were originally modled as integer ranges but this was quickly changed to being moddled by a \code{Set} of integers. This was done for several reasons. Firstly this supports domains which are not continues ranges, which is required in certain problems. Secondly, this allowes for fast checking of containment, adding and removal of values which is instrumental for a constraint solver. Thirdly, this allows for easier extentions when more complex objects become desirable in domains. 
 
-\subsubsection{Pruning}
+\subsection{Constraints vs. Arcs} Since the solver only had to support binary table constraints the constraints are modled as two variables and a set of tuples. The tuples representing the allowed value assignements, and stored in a list. This proved problematic for two reasons. Firstly there was the trouble of finding the correct constraints without having to check all of them, since this would be very expensive for a large amount of constraints. Secondly it introduced a lot of amiguity over the domain of which variable had to get pruned. This was eventually solved by to changes. Firstly the constraints we converted from bi-directional contraints into uni-dicrectional arcs. So for example that meant that the constraint $c(x,y) = \{\langle1,2\rangle\}$ would be stored as $c(x,y) = \{\langle1,2\rangle\}$ \textit{and} $c(y,x) = \{\langle2,1\rangle\}$, with the implicit assumption that the second variable was always the one getting pruned. This allowed the constraints to be stored in a \code{Map<CSPVariable, Map<CSPVariable, BinaryArc>>}, meaning that we would index the arcs by the ``origin" and then by the ``destination" variable. This allowed for fast accesment of the relevant constrains and removed the ambiguity over which domain would have to be pruned, at the cost of extra storage space. It is important to note however that this does not imply extra work in upkeep of the domains since support is bi-directional by definition. It also meant that \code{hashCode} and \code{equals} methods had to be writen for all the classes in the containment chain, but this proved to be no problem. It also allowed for easy retreaval of all outgoing or incoming arcs, given a variable, which proved very useful in the implementation of MAC to be discussed later. 
 
+\subsubsection{Pruning} The solver also needed a mechanic to undo the pruning of domains that was done by the arc revision upon backtracking. Since FC nor MAC ever backtracks more than one level at a time, a \code{Stack} was chosen to record the most recent domain changes. That way, upon backtracking, only the top of the stack had to be restored. The changes were recorded by having the \code{revise} method simply return a \code{Set} of all values that were removed from the domain. These values were then stored in a \code{Map<CSPVariable,Set<Integer>>}  and then pushed onto the stack. Since \code{CSPVariable} already had its \code{hashCode} and \code{equals} methods implemented this was fairly simple. 
+ 
 \subsection{Heuristics}
 \subsubsection{Dynamic heuristics}
+To support the use of heuristics, a \code{PriorityQueue} was used to store the variables. The type of heuristics used was determined by which \code{Comparator}
+ was used. Here a custom one was implemented for the dynamic smallest domain heuristic. This comparator simply chcked the sizes of the the domains of the two variables. It was chosen to make the dynamic smallest domain heuristic the default option. 
+\subsubsection{Static heuristics} The static heuristics were implemented in much the same way as the dynamic, with the added complexity that a file containg the order has to be supplied at runtime. The heuristic is then read in in the format of \code{name,order}, with each line containting exactly one pair, without any input checking, i.e. the reader assumes that all the variables in the problem are also present in the heuristic file. A Heuristic generator was also implemented, though the format of the heuristic files was designed to be readable and writable for both humans and machienes. In the heuristic generator, code for generating the heuristics for lexographic and maximum degrre variable ordering was also implemented. 
 
-\subsubsection{Static heuristics}
+When the static heuristic is used the order in which the variables are to be processed is stored within the variable class, which is technically a breach of abstractions. It does however make the code for storing and accesing the variables a lot simpler and more elegant, so this was deemed acceptable. Care was also taken to make sure that the variables could opperate without these orderings so that the variables could still be used in other contexts. 
 
 \subsection{MAC}
+The only tangeble difference  between FC and MAC is the use of AC3. AC3 proved easy to implement after the arc model was introduced, since this provided easy ways of accessing the correct arcs as mentioned previously. 
+
+\subsection{testing}
+Testing was done through a variaty of methods. Firstly, a solver using backtracking was also implemented to be able to generate the correct answers to small problems for comparison, and to get a baseline for performance for the emperical evaluation. Secondly the testing was mostly done with the use of \code{assert} statements to provide sanitiy checks where possible and make the program fail immediately upon violating one of these checks. This allowed easier diagnosis and ultimately faster debuging of the code, as well as confidence that the solutions produced were correct. Here \code{assert} statements were used not only to let the program fail as fast as possible but also to be able to easitly disable the checking after design was done, since the checks done are not always trivial and can incur performance penalties. 
+
+\subsection{Design limitations and advantages} 
+\paragraph{limitations}The design of the solver has a few flaws. Firstly, there is a lot of common code between the three solvers (one using backtracking, FC and MAC respectively). It would have been better to implement these using a basic abstract solver class and then providing mechanics to extend the common parts by way of inheretence and or interface implementation. This would have made the code more compact and easier to maintain. Secondly, not a lot of flexibility is offered to use different dynamic heuristics at the user level. The static heuristics can be altered by the user by manually edditing the files, but no such mechanic exits for the dynamic heuristics. It would have been nice to provide some mechanic to the user to be able to use different dynamic heuristics. 
 
 
-\section{Eperical evaluation}
+\section{Emperical evaluation}
 
 \subsection{Experiment setup}
 
