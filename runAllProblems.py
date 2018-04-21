@@ -14,26 +14,26 @@ constrPatern = re.compile("Number of Constraints: (\d+)")
 errorPatern  = re.compile("")
 
 
-heuristics = ["Name", "Random", "MaxDegree"]
+heuristics = ["Name", "MaxDegree"]
 call("rm -f " + cspFolder + "/*.csph",shell=True)
 call("java -classpath " + binFolder + " HeuristicGenerator "+cspFolder,shell=True)
-call("rm -f " + logFile + " && touch " + logFile + " && echo \"Algorithm,Heuristic,Problem,branches explored,Arcs Revised,number of vars,number of constraints\" >> "+logFile,shell=True)
+# call("rm -f " + logFile + " && touch " + logFile + " && echo \"Algorithm,Heuristic,Problem,Branches explored,Arcs Revised,number of vars,number of constraints\" >> "+logFile,shell=True)
 
 for file in sorted(os.listdir(cspFolder)):
     if(problemPatern.match(file)):
         problem = os.path.splitext(file)[0]
         print(problem)
-        BTOutput = check_output("java -classpath " + binFolder + " -ea BTSolver " + cspFolder + file ,shell=True)
-        branchSearch = branchPatern.search(BTOutput)
-        branchesExplored = branchSearch.group(1)
-        arcsRevised = 0
-        varSearch = varPatern.search(BTOutput)
-        varsInProb = varSearch.group(1)
-        constrSearch = constrPatern.search(BTOutput)
-        csontrsInProblem = constrSearch.group(1)
-        lineOut = "Backtracking,None, " + problem + ", " + str(branchesExplored) + ", " + str(arcsRevised)+ ", " + str(varsInProb) + ", " + str(csontrsInProblem)
-        call("echo \"" + lineOut + "\" >> "+logFile,shell=True)
-        print(lineOut)
+        # BTOutput = check_output("java -classpath " + binFolder + " -ea BTSolver " + cspFolder + file ,shell=True)
+        # branchSearch = branchPatern.search(BTOutput)
+        # branchesExplored = branchSearch.group(1)
+        # arcsRevised = 0
+        # varSearch = varPatern.search(BTOutput)
+        # varsInProb = varSearch.group(1)
+        # constrSearch = constrPatern.search(BTOutput)
+        # csontrsInProblem = constrSearch.group(1)
+        # lineOut = "Backtracking,None, " + problem + ", " + str(branchesExplored) + ", " + str(arcsRevised)+ ", " + str(varsInProb) + ", " + str(csontrsInProblem)
+        # call("echo \"" + lineOut + "\" >> "+logFile,shell=True)
+        # print(lineOut)
 
         FCSDOutput = check_output("java -classpath " + binFolder + " -ea FCSolver " + cspFolder + file ,shell=True)
         branchSearch = branchPatern.search(FCSDOutput)

@@ -83,3 +83,9 @@ Maintaining Arc Consistency, MaxDegree, langfords3_9, 79, 1123, 27, 342
 Backtracking,None, zFinnishSudoku, 11320226975, 0, 81, 810
 Forward Checking, Smallest Domain, zFinnishSudoku, 115847, 240069, 81, 810
 Forward Checking, Name, zFinnishSudoku, 3027747, 7816364, 81, 810
+Forward Checking, Smallest Domain, zFinnishSudoku, 115847, 240069, 81, 810
+Forward Checking, Name, zFinnishSudoku, 3027747, 7816364, 81, 810
+Forward Checking, MaxDegree, zFinnishSudoku, 218711, 537743, 81, 810
+Maintaining Arc Consistency, Smallest Domain, zFinnishSudoku, 4211, 55013, 81, 810
+Maintaining Arc Consistency, Name, zFinnishSudoku, 9805, 89290, 81, 810
+Maintaining Arc Consistency, MaxDegree, zFinnishSudoku, 1313, 7692, 81, 810
